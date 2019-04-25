@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+<title>CoRpower’s Algorithms for Simulating Placebo Group and Baseline Immunogenicity Predictor Data</title>
+
+
+
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore"><code>CoRpower</code>’s Algorithms for Simulating Placebo Group and Baseline Immunogenicity Predictor Data</h1>
+
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>The <code>CoRpower</code> package assumes that <span class="math inline">\(P(Y^{\tau}(1)=Y^{\tau}(0))=1\)</span> for the biomarker sampling timepoint <span class="math inline">\(\tau\)</span>, which renders the CoR parameter <span class="math inline">\(P(Y=1 \mid S=s_1, Z=1, Y^{\tau}=0)\)</span> equal to <span class="math inline">\(P(Y=1 \mid S=s_1, Z=1, Y^{\tau}(1)=Y^{\tau}(0)=0)\)</span>, which links the CoR and biomarker-specific treatment efficacy (TE) parameters. Estimation of the latter requires outcome data in placebo recipients, and some estimation methods additionally require availability of a baseline immunogenicity predictor (BIP) of <span class="math inline">\(S(1)\)</span>, the biomarker response at <span class="math inline">\(\tau\)</span> under assignment to treatment. In order to link power calculations for detecting a correlate of risk (CoR) and a correlate of TE (coTE), <code>CoRpower</code> allows to export simulated data sets that are used in <code>CoRpower</code>’s calculations and that are extended to include placebo-group and BIP data for harmonized use by methods assessing biomarker-specific TE. This vignette aims to describe <code>CoRpower</code>’s algorithms, and the underlying assumptions, for simulating placebo-group and BIP data. The exported data sets include full rectangular data to allow the user to consider various biomarker sub-sampling designs, e.g., different biomarker case:control sampling ratios, or case-control vs. case-cohort designs.</p>
+<hr />
+</div>
+<div id="algorithms-for-simulating-placebo-group-data" class="section level2">
+<h2>Algorithms for Simulating Placebo Group Data</h2>
+<div id="trichotomous-x-and-s1-using-approach-1" class="section level3">
+<h3>Trichotomous <span class="math inline">\(\, X\)</span> and <span class="math inline">\(\, S(1)\)</span> Using Approach 1</h3>
+<ol>
+<li>
+Specify <span class="math inline">\(P^{lat}_0\)</span>, <span class="math inline">\(P^{lat}_2\)</span>, <span class="math inline">\(P_0\)</span>, <span class="math inline">\(P_2\)</span>, <span class="math inline">\(risk_0\)</span>, <span class="math inline">\(n_{cases, 0}\)</span>, <span class="math inline">\(n_{controls, 0}\)</span>, <span class="math inline">\(K\)</span>
+<ul>
+<li>
+<span class="math inline">\(N_{complete, 0} = n_{cases, 0} + n_{controls, 0}\)</span>
+</ul>
+<li>
+Specify <span class="math inline">\(Sens\)</span>, <span class="math inline">\(Spec\)</span>, <span class="math inline">\(FP^0\)</span>, and <span class="math inline">\(FN^2\)</span>
+<li>
+Number of observations in each latent subgroup: <span class="math inline">\(N_x = N_{complete, 0} P^{lat}_x\)</span>
+<li>
+Simulate <span class="math inline">\(X\)</span> under the assumption of homogeneous risk in the placebo group:
+<ul>
+<li>
+Cases: <span class="math inline">\(\left(n_{cases, 0}(0),n_{cases,0}(1),n_{cases,0}(2)\right) \sim \mathsf{Mult}(n_{cases,0},(p_0,p_1,p_2))\)</span>, where
+<span class="math display">\[\begin{align*}
+  p_x=P(X=x|Y=1,Y^{\tau}=0,Z=0) &amp;= P(X=x|Y(0)=1)\\ 
+  &amp;= \frac{P(Y(0)=1|X=x)P(X=x)}{P(Y(0)=1)}\\
+  &amp;= \frac{risk^{lat}_0(x)P^{lat}_{x}}{risk_0}\\
+  &amp;= P^{lat}_{x} \quad \text{because } risk^{lat}_0(x)=risk_0
+  \end{align*}\]</span>
+<li>
+Controls: <span class="math inline">\(\left(n_{controls,0}(0),n_{controls,0}(1),n_{controls,0}(2)\right) \sim \mathsf{Mult}(n_{controls,0},(p_0,p_1,p_2))\)</span>, where
+<span class="math display">\[\begin{align*}
+  p_x=P(X=x|Y=0,Y^{\tau}=0,Z=0) &amp;= P(X=x|Y(0)=0)\\ 
+  &amp;= \frac{P(Y(0)=0|X=x)P(X=x)}{P(Y(0)=0)}\\
+  &amp;= \frac{(1-risk^{lat}_0(x))P^{lat}_{x}}{(1-risk_0)}\\
+  &amp;= P^{lat}_{x} \quad \text{because } risk^{lat}_0(x)=risk_0
+  \end{align*}\]</span>
+<li>
+<span class="math inline">\(n_{controls,0}(x) = N_x - n_{cases,0}(x)\)</span>
+</ul>
+<li>
+Simulate <span class="math inline">\(Y\)</span>: Vector with <span class="math inline">\(n_{cases,0}(0)\)</span> 1’s, followed by <span class="math inline">\(n_{controls,0}(0)\)</span> 0’s, followed by <span class="math inline">\(n_{cases,0}(1)\)</span> 1’s, etc.
+<li>
+Simulate <span class="math inline">\(S(1)\)</span>: For each of the <span class="math inline">\(N_x\)</span> subjects, generate <span class="math inline">\(S(1)\)</span> by a draw from <span class="math inline">\(\mathsf{Mult}(1,(p_0,p_1,p_2))\)</span>, where <span class="math inline">\(p_k=P(S(1)=k|X=x)\)</span> is given by <span class="math inline">\(Sens, Spec\)</span>, etc.<br />
+
+</ol>
+</div>
+<div id="trichotomous-x-and-s1-using-approach-2" class="section level3">
+<h3>Trichotomous <span class="math inline">\(\, X\)</span> and <span class="math inline">\(\, S(1)\)</span> Using Approach 2</h3>
+<ol>
+<li>
+Specify <span class="math inline">\(P^{lat}_0\)</span>, <span class="math inline">\(P^{lat}_2\)</span>, <span class="math inline">\(P_0\)</span>, <span class="math inline">\(P_2\)</span>, <span class="math inline">\(risk_0\)</span>, <span class="math inline">\(N_{complete,0}\)</span>, <span class="math inline">\(n_{cases,0}\)</span>, <span class="math inline">\(n^S_{cases}\)</span>, <span class="math inline">\(K\)</span>
+<li>
+Specify <span class="math inline">\(\rho\)</span> and <span class="math inline">\(\sigma^2_{obs}\)</span>
+<li>
+Calculation of <span class="math inline">\((Sens, Spec, FP^0, FP^1, FN^1, FN^2)\)</span>:
+<ol type="i">
+<li>
+Assuming the classical measurement error model, where <span class="math inline">\(X^{\ast} \sim \mathsf{N}(0,\sigma^2_{tr})\)</span>, solve <span class="math display">\[P^{lat}_0 = P(X^{\ast} \leq \theta_0) \quad \textrm{and} \quad P^{lat}_2 = P(X^{\ast} &gt; \theta_2)\]</span> for <span class="math inline">\(\theta_0\)</span> and <span class="math inline">\(\theta_2\)</span>
+<li>
+Generate <span class="math inline">\(B\)</span> realizations of <span class="math inline">\(X^{\ast}\)</span> and <span class="math inline">\(S^{\ast} = X^{\ast} + e\)</span>, where <span class="math inline">\(e \sim \mathsf{N}(0,\sigma^2_{e})\)</span>, and <span class="math inline">\(X^{\ast}\)</span> independent of <span class="math inline">\(e\)</span> + <span class="math inline">\(B = 20,000\)</span> by default
+<li>
+Using <span class="math inline">\(\theta_0\)</span> and <span class="math inline">\(\theta_2\)</span> from Step i., define
+<span class="math display">\[\begin{align*}
+  Spec(\phi_0) &amp;= P(S^{\ast} \leq \phi_0 \mid X^{\ast} \leq \theta_0)\\
+  FN^1(\phi_0) &amp;= P(S^{\ast} \leq \phi_0 \mid X^{\ast} \in (\theta_0,\theta_2])\\
+  FN^2(\phi_0) &amp;= P(S^{\ast} \leq \phi_0 \mid X^{\ast} &gt; \theta_2)\\
+  Sens(\phi_2) &amp;= P(S^{\ast} &gt; \phi_2 \mid X^{\ast} &gt; \theta_2)\\
+  FP^1(\phi_2) &amp;= P(S^{\ast} &gt; \phi_2 \mid X^{\ast} \in (\theta_0,\theta_2])\\
+  FP^0(\phi_2) &amp;= P(S^{\ast} &gt; \phi_2 \mid X^{\ast} \leq \theta_0)
+  \end{align*}\]</span>
+Estimate <span class="math inline">\(Spec(\phi_0)\)</span> by <span class="math display">\[\widehat{Spec}(\phi_0) = \frac{\#\{S^{\ast}_b \leq \phi_0, X^{\ast}_b \leq \theta_0\}}{\#\{X^{\ast}_b \leq \theta_0\}}\,\]</span> etc.
+<li>
+Find <span class="math inline">\(\phi_0 = \phi^{\ast}_0\)</span> and <span class="math inline">\(\phi_2 = \phi^{\ast}_2\)</span> that numerically solve
+<span class="math display">\[\begin{align*}
+  P_0 &amp;= \widehat{Spec}(\phi_0)P^{lat}_0 + \widehat{FN}^1(\phi_0)P^{lat}_1 + \widehat{FN}^2(\phi_0)P^{lat}_2\\
+  P_2 &amp;= \widehat{Sens}(\phi_2)P^{lat}_2 + \widehat{FP}^1(\phi_2)P^{lat}_1 + \widehat{FP}^0(\phi_2)P^{lat}_0
+  \end{align*}\]</span>
+and compute <span class="math display">\[
+  Spec = \widehat{Spec}(\phi^{\ast}_0),\; Sens = \widehat{Sens}(\phi^{\ast}_2),\; \textrm{etc.}
+  \]</span>
+</ol>
+<li>
+Follow Steps 3–6 under Approach 1
+</ol>
+</div>
+<div id="continuous-x-and-s1" class="section level3">
+<h3>Continuous <span class="math inline">\(\, X^*\)</span> and <span class="math inline">\(\, S^*(1)\)</span></h3>
+<ol>
+<li>
+Specify <span class="math inline">\(P^{lat}_{lowestVE}\)</span>, <span class="math inline">\(\rho\)</span>, <span class="math inline">\(\sigma^2_{obs}\)</span>, <span class="math inline">\(VE_{lowest}\)</span>, <span class="math inline">\(risk_0\)</span>, <span class="math inline">\(n_{cases,0}\)</span>, <span class="math inline">\(n_{controls, 0}\)</span>, <span class="math inline">\(n^S_{cases}\)</span>, <span class="math inline">\(K\)</span>
+<ul>
+<li>
+<span class="math inline">\(N_{complete, 0} = n_{cases, 0} + n_{controls, 0}\)</span>
+</ul>
+<li>
+Simulate <span class="math inline">\(Y\)</span> by creating a vector with <span class="math inline">\(n_{cases,0}\)</span> 1’s followed by <span class="math inline">\(n_{controls,0}\)</span> 0’s.
+<li>
+Simulate <span class="math inline">\(X^*\)</span> under the assumption of homogeneous risk in the placebo group:
+<ul>
+<li>
+Cases: from a grid of values ranging from -3 to 3, sample <span class="math inline">\(n_{cases,0}\)</span> with replacement from:
+<span class="math display">\[\begin{align*}
+  f_{X^{\ast}}(x^{\ast}|Y=1,Y^{\tau}=0,Z=0) &amp;= f_{X^{\ast}}(x^{\ast}|Y(0)=1)\\
+  &amp;= \frac{P(Y(0)=1|X^*=x^*)f_{X^{\ast}}(x^{\ast})}{P(Y(0)=1)}\\
+  &amp;= \frac{risk^{lat}_0(x^*)f_{X^{\ast}}(x^{\ast})}{risk_0}\\
+  &amp;= f_{X^{\ast}}(x^{\ast}) \quad \text{because } risk^{lat}_0(x^*)=risk_0
+  \end{align*}\]</span>
+<li>
+Controls: from a grid of values ranging from -3 to 3, sample <span class="math inline">\(n_{controls,0}\)</span> with replacement from:
+<span class="math display">\[\begin{align*}
+  f_{X^{\ast}}(x^{\ast}|Y=0,Y^{\tau}=0,Z=0) &amp;= f_{X^{\ast}}(x^{\ast}|Y(0)=0)\\
+  &amp;= \frac{P(Y(0)=0|X^*=x^*)f_{X^{\ast}}(x^{\ast})}{P(Y(0)=0)}\\
+  &amp;= \frac{(1-risk^{lat}_0(x^*))f_{X^{\ast}}(x^{\ast})}{1-risk_0}\\
+  &amp;= f_{X^{\ast}}(x^{\ast}) \quad \text{because } risk^{lat}_0(x^*)=risk_0
+  \end{align*}\]</span>
+<li>
+<span class="math inline">\(f_{X^{\ast}}(x^{\ast})\)</span> is fully specified because <span class="math inline">\(X^* \sim N(0, \sigma^2_{tr})\)</span>
+</ul>
+<li>
+Simulate <span class="math inline">\(S^*(1)\)</span>: <span class="math inline">\(S^*(1)=X^*+\epsilon,\)</span> where <span class="math inline">\(\epsilon \sim N(0, \sigma^2_e)\)</span> and <span class="math inline">\(\sigma_e^2=(1-\rho)\sigma^2_{obs}\)</span>. <span class="math inline">\(\epsilon\)</span> is independent of <span class="math inline">\(X^*\)</span> and is simulated by <code>rnorm(Ncomplete, mean=0, sd=sqrt(sigma2e))</code>
+</ol>
+<hr />
+</div>
+</div>
+<div id="algorithms-for-simulating-a-baseline-immunogenicity-predictor-bip" class="section level2">
+<h2>Algorithms for Simulating a Baseline Immunogenicity Predictor (BIP)</h2>
+<div id="trichotomous-x-s1-and-bip-using-approach-1" class="section level3">
+<h3>Trichotomous <span class="math inline">\(\, X, S(1),\)</span> and <span class="math inline">\(\, BIP\)</span> Using Approach 1</h3>
+<ol>
+<li>
+The user specifies a classification rule defined by <span class="math inline">\(P(BIP=i \mid S(1)=j)\)</span>, <span class="math inline">\(i,j=0,1,2\)</span>.
+<li>
+For a subject with biomarker measurement <span class="math inline">\(S_k(1)\)</span>, generate <span class="math inline">\(BIP_k\)</span> by a draw from <span class="math inline">\(\mathsf{Mult}(1, (q_0, q_1, q_2))\)</span>, where <span class="math inline">\(q_i=P(BIP_k=i \mid S(1)=S_k(1))\)</span>, <span class="math inline">\(i=0,1,2\)</span>.
+</ol>
+</div>
+<div id="trichotomous-x-s1-and-bip-using-approach-2" class="section level3">
+<h3>Trichotomous <span class="math inline">\(\, X, S(1),\)</span> and <span class="math inline">\(\, BIP\)</span> Using Approach 2</h3>
+<p><em>Note: All variables with * are continuous.</em></p>
+<ol>
+<li>
+The user specifies <span class="math inline">\(\operatorname{corr}(BIP^*, S^*(1))\)</span>.
+<li>
+Assuming that <span class="math inline">\(BIP^*\)</span> follows an additive measurement error model, i.e., <span class="math inline">\(BIP^* := S^*(1) + \delta\)</span>, where <span class="math inline">\(\delta \sim N(0, \sigma^2_{\delta})\)</span> with an unknown <span class="math inline">\(\sigma^2_{\delta}\)</span>, and <span class="math inline">\(\delta, \epsilon\)</span>, and <span class="math inline">\(X^*\)</span> are independent, solve the following equation for <span class="math inline">\(\operatorname{var}\delta = \sigma^2_{\delta}\)</span>: <span class="math display">\[
+\operatorname{corr}(BIP^*, S^*(1)) = \sqrt\frac{\operatorname{var}X^* + \operatorname{var}\epsilon}{\operatorname{var}X^* + \operatorname{var}\epsilon + \operatorname{var}\delta}
+\]</span>
+<li>
+For the fixed <span class="math inline">\(\phi^{\ast}_0\)</span> and <span class="math inline">\(\phi^{\ast}_2\)</span> derived above, define
+<span class="math display">\[\begin{align*}
+Spec_{BIP}(\xi_0) &amp;= P(BIP^{\ast} \leq \xi_0 \mid S^{\ast} \leq \phi^{\ast}_0)\\
+FN^1_{BIP}(\xi_0) &amp;= P(BIP^{\ast} \leq \xi_0 \mid S^{\ast} \in (\phi^{\ast}_0,\phi^{\ast}_2])\\
+FN^2_{BIP}(\xi_0) &amp;= P(BIP^{\ast} \leq \xi_0 \mid S^{\ast} &gt; \phi^{\ast}_2)\\
+Sens_{BIP}(\xi_2) &amp;= P(BIP^{\ast} &gt; \xi_2 \mid S^{\ast} &gt; \phi^{\ast}_2)\\
+FP^1_{BIP}(\xi_2) &amp;= P(BIP^{\ast} &gt; \xi_2 \mid S^{\ast} \in (\phi^{\ast}_0,\phi^{\ast}_2])\\
+FP^0_{BIP}(\xi_2) &amp;= P(BIP^{\ast} &gt; \xi_2 \mid S^{\ast} \leq \phi^{\ast}_0)
+\end{align*}\]</span>
+<li>
+Using the same technique as in the derivation of <span class="math inline">\(\phi^{\ast}_0\)</span> and <span class="math inline">\(\phi^{\ast}_2\)</span> above, find <span class="math inline">\(\xi_0=\xi^{\ast}_0\)</span> and <span class="math inline">\(\xi_2=\xi^{\ast}_2\)</span> that numerically solve
+<span class="math display">\[\begin{align*}
+P_0 &amp;= \widehat{Spec}_{BIP}(\xi_0)P_0 + \widehat{FN}_{BIP}^1(\xi_0)P_1 + \widehat{FN}_{BIP}^2(\xi_0)P_2\\
+P_2 &amp;= \widehat{Sens}_{BIP}(\xi_2)P_2 + \widehat{FP}_{BIP}^1(\xi_2)P_1 + \widehat{FP}_{BIP}^0(\xi_2)P_0
+\end{align*}\]</span>
+and compute <span class="math display">\[
+Spec_{BIP} = \widehat{Spec}_{BIP}(\xi^{\ast}_0),\; Sens_{BIP} = \widehat{Sens}_{BIP}(\xi^{\ast}_2),\; \textrm{etc.}
+\]</span>
+<li>
+For a subject with biomarker measurement <span class="math inline">\(S_k(1)\)</span>, generate <span class="math inline">\(BIP_k\)</span> by a draw from <span class="math inline">\(\mathsf{Mult}(1, (q_0, q_1, q_2))\)</span>, where <span class="math inline">\(q_i\)</span>, <span class="math inline">\(i=0,1,2\)</span>, are determined by <span class="math inline">\(Sens_{BIP}\)</span>, <span class="math inline">\(Spec_{BIP}\)</span>, etc. obtained in Step 4.
+</ol>
+</div>
+<div id="continuous-x-s1-and-bip" class="section level3">
+<h3>Continuous <span class="math inline">\(\, X^*, S^*(1),\)</span> and <span class="math inline">\(\, BIP^*\)</span></h3>
+<ol>
+<li>
+The user specifies <span class="math inline">\(\operatorname{corr}(BIP^*, S^*(1))\)</span>.
+<li>
+Assuming that <span class="math inline">\(BIP^*\)</span> follows an additive measurement error model, i.e., <span class="math inline">\(BIP^* := S^*(1) + \delta\)</span>, where <span class="math inline">\(\delta \sim N(0, \sigma^2_{\delta})\)</span> with an unknown <span class="math inline">\(\sigma^2_{\delta}\)</span>, and <span class="math inline">\(\delta, \epsilon\)</span>, and <span class="math inline">\(X^*\)</span> are independent, solve the following equation for <span class="math inline">\(\operatorname{var}\delta = \sigma^2_{\delta}\)</span>: <span class="math display">\[
+\operatorname{corr}(BIP^*, S^*(1)) = \sqrt\frac{\operatorname{var}X^* + \operatorname{var}\epsilon}{\operatorname{var}X^* + \operatorname{var}\epsilon + \operatorname{var}\delta}
+\]</span>
+<li>
+For a subject with biomarker measurement <span class="math inline">\(S^*_k(1)\)</span>, generate <span class="math inline">\(BIP^*_k\)</span> as <span class="math inline">\(BIP^*_k = S^*_k(1) + \delta\)</span> using <span class="math inline">\(\sigma^2_{\delta} = \operatorname{var}\delta\)</span> obtained in Step 2.
+</ol>
+</div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

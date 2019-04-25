@@ -11,14 +11,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-<meta name="date" content="2018-09-28" />
 
 <title>Introduction to CoRpower</title>
 
 
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
+<style type="text/css" data-origin="pandoc">
 div.sourceCode { overflow-x: auto; }
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
   margin: 0; padding: 0; vertical-align: baseline; border: none; }
@@ -54,7 +53,29 @@ code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
 code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
 code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+
 </style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
 
 
 
@@ -67,12 +88,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<h1 class="title toc-ignore">Introduction to CoRpower</h1>
-<h4 class="date"><em>2018-09-28</em></h4>
+<h1 class="title toc-ignore">Introduction to <code>CoRpower</code></h1>
 
 
 
-<p>The <code>CoRpower</code> package performs power calculations for correlates of risk, as described in [Gilbert, Janes, and Huang (2016). Power/Sample Size Calculations for Assessing Correlates of Risk in Clinical Efficacy Trials] The power calculations accomodate three types of biomarkers:</p>
+<p>The <code>CoRpower</code> package performs power calculations for correlates of risk, as described in [Gilbert, Janes, and Huang (2016). Power/Sample Size Calculations for Assessing Correlates of Risk in Clinical Efficacy Trials] The power calculations accommodate three types of biomarkers:</p>
 <ul>
 <li>trichotomous</li>
 <li>dichotomous</li>
@@ -97,17 +117,17 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2>Set-up and notation | Without replacement sampling</h2>
 <ul>
 <li>Assume a randomized vaccine vs. placebo/control vaccine efficacy trial</li>
-<li><span class="math inline">\(N=\)</span> number of vaccine recipients observed to be at risk at <span class="math inline">\(\tau\)</span></li>
-<li><span class="math inline">\(n_{cases}\)</span> (<span class="math inline">\(n_{controls}\)</span>) <span class="math inline">\(=\)</span> number of observed cases (controls) between <span class="math inline">\(\tau\)</span> and <span class="math inline">\(\tau_{\mathrm{max}}\)</span>, where cases have <span class="math inline">\(\Delta Y = 1\)</span> and controls have <span class="math inline">\(\Delta (1-Y) = 1\)</span>
+<li><span class="math inline">\(N_1=\)</span> number of vaccine recipients observed to be at risk at <span class="math inline">\(\tau\)</span></li>
+<li><span class="math inline">\(n_{cases,1}\)</span> (<span class="math inline">\(n_{controls,1}\)</span>) <span class="math inline">\(=\)</span> number of observed cases (controls) in vaccine recipients between <span class="math inline">\(\tau\)</span> and <span class="math inline">\(\tau_{\mathrm{max}}\)</span>, where cases have <span class="math inline">\(\Delta Y = 1\)</span> and controls have <span class="math inline">\(\Delta (1-Y) = 1\)</span>
 <ul>
-<li><span class="math inline">\(n_{cases} + n_{controls} \leq N\)</span></li>
+<li><span class="math inline">\(n_{cases,1} + n_{controls,1} \leq N_1\)</span></li>
 </ul></li>
-<li><p><span class="math inline">\(n^S_{cases}\)</span> (<span class="math inline">\(n^S_{controls}\)</span>) <span class="math inline">\(=\)</span> number of observed cases (controls) between <span class="math inline">\(\tau\)</span> and <span class="math inline">\(\tau_{\mathrm{max}}\)</span> with measured <span class="math inline">\(S\)</span> (or <span class="math inline">\(S^{\ast}\)</span>)</p></li>
-<li><p>If calculations done at design stage, then <span class="math inline">\(N\)</span>, <span class="math inline">\(n_{cases}\)</span>, <span class="math inline">\(n_{controls}\)</span>, <span class="math inline">\(n^S_{cases}\)</span>, and <span class="math inline">\(n^S_{controls}\)</span> projected numbers</p></li>
+<li><p><span class="math inline">\(n^S_{cases,1}\)</span> (<span class="math inline">\(n^S_{controls,1}\)</span>) <span class="math inline">\(=\)</span> number of observed cases (controls) in vaccine recipients between <span class="math inline">\(\tau\)</span> and <span class="math inline">\(\tau_{\mathrm{max}}\)</span> with measured <span class="math inline">\(S(1)\)</span> (or <span class="math inline">\(S^{\ast}(1)\)</span>)</p></li>
+<li><p>If calculations done at design stage, then <span class="math inline">\(N_1\)</span>, <span class="math inline">\(n_{cases,1}\)</span>, <span class="math inline">\(n_{controls,1}\)</span>, <span class="math inline">\(n^S_{cases,1}\)</span>, and <span class="math inline">\(n^S_{controls,1}\)</span> projected numbers</p></li>
 </ul>
 </div>
-<div id="algorithm-for-trichotomous-biomarker-s-without-replacement-sampling" class="section level2">
-<h2>Algorithm for trichotomous biomarker <span class="math inline">\(S\)</span> | Without replacement sampling</h2>
+<div id="algorithm-for-trichotomous-biomarker-s1-without-replacement-sampling" class="section level2">
+<h2>Algorithm for trichotomous biomarker <span class="math inline">\(S(1)\)</span> | Without replacement sampling</h2>
 <ol style="list-style-type: decimal">
 <li>Specify overall <span class="math inline">\(VE\)</span> between <span class="math inline">\(\tau\)</span> and <span class="math inline">\(\tau_{\mathrm{max}}\)</span>
 <ul>
@@ -172,7 +192,7 @@ Spec = \widehat{Spec}(\phi^{\ast}_0),\; Sens = \widehat{Sens}(\phi^{\ast}_2),\; 
 <li>In Approach 2, plot <span class="math display">\[
     RR_t \quad \textrm{vs.} \quad \frac{RR^{lat}_2}{RR^{lat}_0},
     \]</span> where <span class="math display">\[
-  RR_t := \frac{risk_1(2)}{risk_1(0)} = \frac{\sum_{x=0}^2 RR^{lat}_x P(X=x|S=2)}{\sum_{x=0}^2 RR^{lat}_x P(X=x|S=0)}
+  RR_t := \frac{risk_1(2)}{risk_1(0)} = \frac{\sum_{x=0}^2 RR^{lat}_x P(X=x|S(1)=2)}{\sum_{x=0}^2 RR^{lat}_x P(X=x|S(1)=0)}
   \]</span></li>
 <li><p>For <span class="math inline">\(\rho &lt; 1\)</span>, <span class="math inline">\(RR_t\)</span> closer to 1 than <span class="math inline">\(RR^{lat}_2\big/ RR^{lat}_0\)</span></p></li>
 </ul></li>
@@ -180,22 +200,22 @@ Spec = \widehat{Spec}(\phi^{\ast}_0),\; Sens = \widehat{Sens}(\phi^{\ast}_2),\; 
 <ol type="a">
 <em>Full data</em>
 <li>
-<span class="math inline">\(N_x = (n_{controls} + n_{cases}) P^{lat}_x\)</span>
+<span class="math inline">\(N_x = (n_{controls,1} + n_{cases,1}) P^{lat}_x\)</span>
 <li>
-<span class="math inline">\(\left(n_{cases}(0),n_{cases}(1),n_{cases}(2)\right) \sim \mathsf{Mult}(n_{cases},(p_0,p_1,p_2))\)</span>, where <span class="math inline">\(p_k=P(X=k|Y=1,Y^{\tau}=0,Z=1)\)</span>
+<span class="math inline">\(\left(n_{cases,1}(0),n_{cases,1}(1),n_{cases,1}(2)\right) \sim \mathsf{Mult}(n_{cases,1},(p_0,p_1,p_2))\)</span>, where <span class="math inline">\(p_k=P(X=k|Y=1,Y^{\tau}=0,Z=1)\)</span>
 <li>
-For each of the <span class="math inline">\(N_x\)</span> subjects, generate <span class="math inline">\(S_i\)</span> by a draw from <span class="math inline">\(\mathsf{Mult}(1,(p_0,p_1,p_2))\)</span>, where <span class="math inline">\(p_k=P(S=k|X=x)\)</span>
+For each of the <span class="math inline">\(N_x\)</span> subjects, generate <span class="math inline">\(S_i(1)\)</span> by a draw from <span class="math inline">\(\mathsf{Mult}(1,(p_0,p_1,p_2))\)</span>, where <span class="math inline">\(p_k=P(S(1)=k|X=x)\)</span>
 </li>
 <em>Observed data</em>
 <li>
-Sample without replacement <span class="math inline">\(n^S_{cases}\)</span> and <span class="math inline">\(n^S_{controls} = K n^S_{cases}\)</span> controls with measured <span class="math inline">\(S\)</span> <span class="math inline">\((R=1)\)</span>, i.e., the control:case ratio is not fixed within subgroup <span class="math inline">\(X=x\)</span>
+Sample without replacement <span class="math inline">\(n^S_{cases,1}\)</span> and <span class="math inline">\(n^S_{controls,1} = K n^S_{cases,1}\)</span> controls with measured <span class="math inline">\(S(1)\)</span> <span class="math inline">\((R=1)\)</span>, i.e., the control:case ratio is not fixed within subgroup <span class="math inline">\(X=x\)</span>
 </ol></li>
-<li>For each observed data set, compute the 1-sided one-degree-of-freedom Wald test statistic for <span class="math inline">\(H_0 \Leftrightarrow \{\widetilde{H}_0: \beta_S \geq 0\}\)</span> from IPW logistic regression model that accounts for biomarker sampling design (function <code>tps</code> in R package <code>osDesign</code>)
+<li>For each observed data set, compute the 1-sided one-degree-of-freedom Wald test statistic for <span class="math inline">\(H_0 \Leftrightarrow \{\widetilde{H}_0: \beta_S(1) \geq 0\}\)</span> from IPW logistic regression model that accounts for biomarker sampling design (function <code>tps</code> in R package <code>osDesign</code>)
 <ul>
 <li>Alternatively, use the generalized two-degree-of-freedom Wald test</li>
 </ul></li>
 <li>Compute power as proportion of data sets with 1-sided Wald test <span class="math inline">\(p \leq \alpha/2\)</span> for specified <span class="math inline">\(\alpha\)</span></li>
-<li>Repeat power calculation varying control:case ratio, <span class="math inline">\(n_{cases}\)</span>, <span class="math inline">\(n^S_{cases}\)</span>, <span class="math inline">\((P^{lat}_0, P^{lat}_2, P_0, P_2)\)</span>, <span class="math inline">\((Sens, Spec)\)</span>, <span class="math inline">\(\rho\)</span></li>
+<li>Repeat power calculation varying control:case ratio, <span class="math inline">\(n_{cases,1}\)</span>, <span class="math inline">\(n^S_{cases,1}\)</span>, <span class="math inline">\((P^{lat}_0, P^{lat}_2, P_0, P_2)\)</span>, <span class="math inline">\((Sens, Spec)\)</span>, <span class="math inline">\(\rho\)</span></li>
 </ol>
 </div>
 <div id="illustration-hypothetical-randomized-placebo-controlled-ve-trial" class="section level2">
@@ -204,7 +224,7 @@ Sample without replacement <span class="math inline">\(n^S_{cases}\)</span> and 
 <h3><strong>Trial design</strong></h3>
 <ul>
 <li><span class="math inline">\(N_{rand} = 4,100\)</span> participants randomized to each of the vaccine and placebo group and followed for <span class="math inline">\(\tau_{\mathrm{max}}=\)</span> 24 months</li>
-<li>Samples for measurement of <span class="math inline">\(S\)</span> at <span class="math inline">\(\tau=\)</span> 3.5 months stored in all vaccine recipients</li>
+<li>Samples for measurement of <span class="math inline">\(S(1)\)</span> at <span class="math inline">\(\tau=\)</span> 3.5 months stored in all vaccine recipients</li>
 <li>Cumulative endpoint rate between <span class="math inline">\(\tau\)</span> and <span class="math inline">\(\tau_{\mathrm{max}}\)</span> in placebo group <span class="math inline">\(=3.4\%\)</span> <span class="math inline">\((=risk_0)\)</span></li>
 <li><span class="math inline">\(VE_{\tau-\tau_{\mathrm{max}}}=75\%\)</span>, <span class="math inline">\(\quad VE_{0-\tau}=VE_{\tau-\tau_{\mathrm{max}}}/2\)</span></li>
 <li>Cumulative dropout rate between 0 and <span class="math inline">\(\tau_{\mathrm{max}}\)</span> in both groups <span class="math inline">\(=10\%\)</span></li>
@@ -229,69 +249,69 @@ Failure time <span class="math inline">\(T\)</span> and censoring time <span cla
 <h3>Number of vaccine recipients observed to be at risk at <span class="math inline">\(\tau\)</span></h3>
 <p><span class="math display">\[
 \begin{align}
-N &amp;= N_{rand}\, P(T&gt;\tau, C&gt;\tau \mid Z=1)\\
+N_1 &amp;= N_{rand}\, P(T&gt;\tau, C&gt;\tau \mid Z=1)\\
 &amp;= N_{rand}\, P(T&gt;\tau \mid Z=1)\, P(C&gt;\tau \mid Z=1)\\
 &amp;= N_{rand}\, \{1 - RR_{0-\tau}\, P(T \leq \tau \mid Z=0)\}\, P(C&gt;\tau \mid Z=1)\\
 &amp;\approx 4,023
 \end{align}
 \]</span></p>
 </div>
-<div id="number-of-observed-cases-between-tau-and-tau_mathrmmax" class="section level3">
-<h3>Number of observed cases between <span class="math inline">\(\tau\)</span> and <span class="math inline">\(\tau_{\mathrm{max}}\)</span></h3>
+<div id="number-of-observed-cases-in-vaccine-recipients-between-tau-and-tau_mathrmmax" class="section level3">
+<h3>Number of observed cases in vaccine recipients between <span class="math inline">\(\tau\)</span> and <span class="math inline">\(\tau_{\mathrm{max}}\)</span></h3>
 <p><span class="math display">\[
 \begin{align}
-n_{cases} &amp;= N\, P(T\leq \tau_{\mathrm{max}}, T\leq C \mid T&gt;\tau, C&gt;\tau, Z=1)\\
-&amp;= N\, P(T\leq \min(C,\tau_{\mathrm{max}}) \mid T&gt;\tau, C&gt;\tau, Z=1)\\
-&amp;= N\, \frac{\int_{\tau}^{\infty}P(\tau &lt; T \leq \min(c,\tau_{\mathrm{max}})\mid Z=1)f_C(c)\mathop{\mathrm{d}}\!c}{P(T&gt;\tau, C&gt;\tau \mid Z=1)}\\
-&amp;= N\, \frac{\bigg\{\int_{\tau}^{\tau_{\mathrm{max}}}P(\tau &lt; T \leq c\mid Z=1)f_C(c)\mathop{\mathrm{d}}\!c + P(\tau &lt; T \leq \tau_{\mathrm{max}}\mid Z=1) P(C&gt;\tau_{\mathrm{max}})\bigg\}}{P(T&gt;\tau, C&gt;\tau \mid Z=1)}\\
+n_{cases,1} &amp;= N_1\, P(T\leq \tau_{\mathrm{max}}, T\leq C \mid T&gt;\tau, C&gt;\tau, Z=1)\\
+&amp;= N_1\, P(T\leq \min(C,\tau_{\mathrm{max}}) \mid T&gt;\tau, C&gt;\tau, Z=1)\\
+&amp;= N_1\, \frac{\int_{\tau}^{\infty}P(\tau &lt; T \leq \min(c,\tau_{\mathrm{max}})\mid Z=1)f_C(c)\mathop{\mathrm{d}}\!c}{P(T&gt;\tau, C&gt;\tau \mid Z=1)}\\
+&amp;= N_1\, \frac{\bigg\{\int_{\tau}^{\tau_{\mathrm{max}}}P(\tau &lt; T \leq c\mid Z=1)f_C(c)\mathop{\mathrm{d}}\!c + P(\tau &lt; T \leq \tau_{\mathrm{max}}\mid Z=1) P(C&gt;\tau_{\mathrm{max}})\bigg\}}{P(T&gt;\tau, C&gt;\tau \mid Z=1)}\\
 &amp;\approx 32
 \end{align}
 \]</span></p>
 </div>
-<div id="number-of-observed-controls-between-tau-and-tau_mathrmmax" class="section level3">
-<h3>Number of observed controls between <span class="math inline">\(\tau\)</span> and <span class="math inline">\(\tau_{\mathrm{max}}\)</span></h3>
+<div id="number-of-observed-controls-in-vaccine-recipients-between-tau-and-tau_mathrmmax" class="section level3">
+<h3>Number of observed controls in vaccine recipients between <span class="math inline">\(\tau\)</span> and <span class="math inline">\(\tau_{\mathrm{max}}\)</span></h3>
 <p><span class="math display">\[
 \begin{align}
-n_{controls} &amp;= N \, P(T &gt; \tau_{\mathrm{max}}, C &gt; \tau_{\mathrm{max}} \mid T&gt;\tau, C&gt;\tau, Z=1)\\
+n_{controls,1} &amp;= N_1 \, P(T &gt; \tau_{\mathrm{max}}, C &gt; \tau_{\mathrm{max}} \mid T&gt;\tau, C&gt;\tau, Z=1)\\
 &amp;\approx 3,654
 \end{align}
 \]</span></p>
 </div>
-<div id="number-of-observed-cases-controls-between-tau-and-tau_mathrmmax-with-measured-s" class="section level3">
-<h3>Number of observed cases (controls) between <span class="math inline">\(\tau\)</span> and <span class="math inline">\(\tau_{\mathrm{max}}\)</span> with measured <span class="math inline">\(S\)</span></h3>
+<div id="number-of-observed-cases-controls-in-vaccine-recipients-between-tau-and-tau_mathrmmax-with-measured-s1" class="section level3">
+<h3>Number of observed cases (controls) in vaccine recipients between <span class="math inline">\(\tau\)</span> and <span class="math inline">\(\tau_{\mathrm{max}}\)</span> with measured <span class="math inline">\(S(1)\)</span></h3>
 <p><span class="math display">\[
 \begin{align}
-n^S_{cases} &amp;= n_{cases}\\
-n^S_{controls} &amp;= K n^S_{cases}
+n^S_{cases,1} &amp;= n_{cases,1}\\
+n^S_{controls,1} &amp;= K n^S_{cases,1}
 \end{align}
 \]</span></p>
 </div>
-<div id="compute-n-n_cases-n_controls-and-ns_cases-with-computen" class="section level3">
-<h3>Compute <span class="math inline">\(N, n_{cases}, n_{controls},\)</span> and <span class="math inline">\(n^S_{cases}\)</span> with <code>computeN()</code></h3>
+<div id="compute-n_1-n_cases1-n_controls1-and-ns_cases1-with-computen" class="section level3">
+<h3>Compute <span class="math inline">\(N_1, n_{cases,1}, n_{controls,1},\)</span> and <span class="math inline">\(n^S_{cases,1}\)</span> with <code>computeN()</code></h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(CoRpower)
 <span class="kw">computeN</span>(<span class="dt">Nrand =</span> <span class="dv">4100</span>,          <span class="co"># participants randomized to vaccine arm</span>
          <span class="dt">tau =</span> <span class="fl">3.5</span>,             <span class="co"># biomarker sampling timepoint</span>
          <span class="dt">taumax =</span> <span class="dv">24</span>,           <span class="co"># end of follow-up</span>
          <span class="dt">VEtauToTaumax =</span> <span class="fl">0.75</span>,  <span class="co"># VE between 'tau' and 'taumax'</span>
-         <span class="dt">VE0toTau =</span> <span class="fl">0.75</span>/<span class="dv">2</span>,     <span class="co"># VE between 0 and 'tau'</span>
+         <span class="dt">VE0toTau =</span> <span class="fl">0.75</span><span class="op">/</span><span class="dv">2</span>,     <span class="co"># VE between 0 and 'tau'</span>
          <span class="dt">risk0 =</span> <span class="fl">0.034</span>,         <span class="co"># placebo-group endpoint risk between 'tau' and 'taumax'</span>
          <span class="dt">dropoutRisk =</span> <span class="fl">0.1</span>,     <span class="co"># dropout risk between 0 and 'taumax'</span>
-         <span class="dt">propCasesWithS =</span> <span class="dv">1</span>)    <span class="co"># proportion of observed cases with measured S</span></code></pre></div>
+         <span class="dt">propCasesWithS =</span> <span class="dv">1</span>)    <span class="co"># proportion of observed cases with measured S(1)</span></code></pre></div>
 <pre><code>## $N
 ## [1] 4023
 ## 
 ## $nCases
-## [1] 32
+## [1] 33
 ## 
 ## $nControls
-## [1] 3654
+## [1] 3653
 ## 
 ## $nCasesWithS
-## [1] 32</code></pre>
+## [1] 33</code></pre>
 </div>
 </div>
-<div id="illustration-corpower-for-trichotomous-s-without-replacement-sampling" class="section level2">
-<h2>Illustration: <code>CoRpower</code> for trichotomous <span class="math inline">\(\, S\)</span> | Without replacement sampling</h2>
+<div id="illustration-corpower-for-trichotomous-s1-without-replacement-sampling" class="section level2">
+<h2>Illustration: <code>CoRpower</code> for trichotomous <span class="math inline">\(\, S(1)\)</span> | Without replacement sampling</h2>
 <p><strong>Approach 1</strong> <span class="math inline">\((Sens, Spec, FP^0, FN^2\)</span> specified<span class="math inline">\()\)</span></p>
 <ul>
 <li><strong>Scenario 1:</strong> vary control:case ratio</li>
@@ -302,17 +322,17 @@ n^S_{controls} &amp;= K n^S_{cases}
 <ul>
 <li><strong>Scenario 4:</strong> vary <span class="math inline">\(\rho\)</span></li>
 <li><strong>Scenario 5:</strong> vary <span class="math inline">\(P_0^{lat}\)</span>, <span class="math inline">\(P_2^{lat}\)</span>, <span class="math inline">\(P_0\)</span>, <span class="math inline">\(P_2\)</span></li>
-<li><strong>Scenario 6:</strong> vary <span class="math inline">\(n_{cases}\)</span></li>
+<li><strong>Scenario 6:</strong> vary <span class="math inline">\(n_{cases,1}\)</span></li>
 </ul>
 </div>
-<div id="scenario-1-vary-controlcase-ratio-approach-1-trichotomous-s-without-replacement-sampling" class="section level2">
-<h2><em>Scenario 1:</em> vary control:case ratio (Approach 1) | Trichotomous <span class="math inline">\(S\)</span>, without replacement sampling</h2>
+<div id="scenario-1-vary-controlcase-ratio-approach-1-trichotomous-s1-without-replacement-sampling" class="section level2">
+<h2><em>Scenario 1:</em> vary control:case ratio (Approach 1) | Trichotomous <span class="math inline">\(S(1)\)</span>, without replacement sampling</h2>
 <div id="run-simulations-and-compute-power-with-computepower" class="section level3">
 <h3>Run simulations and compute power with <code>computePower()</code></h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pwr &lt;-<span class="st"> </span><span class="kw">computePower</span>(<span class="dt">nCases =</span> <span class="dv">32</span>,                 
-                    <span class="dt">nControls =</span> <span class="dv">3654</span>,            
-                    <span class="dt">nCasesWithS =</span> <span class="dv">32</span>,           
-                    <span class="dt">controlCaseRatio =</span> <span class="dv">5</span>,         <span class="co"># scalar, i.e., separate calls for 5, 3, 1</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pwr &lt;-<span class="st"> </span><span class="kw">computePower</span>(<span class="dt">nCasesTx =</span> <span class="dv">32</span>,                 
+                    <span class="dt">nControlsTx =</span> <span class="dv">3654</span>,            
+                    <span class="dt">nCasesTxWithS =</span> <span class="dv">32</span>,           
+                    <span class="dt">controlCaseRatio =</span> <span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">1</span>), <span class="co"># n^S_controls : n^S_cases ratio         </span>
                     <span class="dt">VEoverall =</span> <span class="fl">0.75</span>,             <span class="co"># overall VE</span>
                     <span class="dt">risk0 =</span> <span class="fl">0.034</span>,                <span class="co"># placebo-group endpoint risk from tau - taumax</span>
                     <span class="dt">VElat0 =</span> <span class="kw">seq</span>(<span class="dv">0</span>, VEoverall, <span class="dt">len=</span><span class="dv">100</span>), <span class="co"># grid of VE (V/P) among lower protected</span>
@@ -329,21 +349,21 @@ n^S_{controls} &amp;= K n^S_{cases}
 <div id="plot-power-curves-with-plotpowertri" class="section level3">
 <h3>Plot power curves with <code>plotPowerTri()</code></h3>
 <p>Basic plotting functions are included in the package to aid with visualizing results. <code>plotPowerTri</code> plots the power curve against the CoR relative risk, <span class="math inline">\(RR_t\)</span>, for trichotomous or binary biomarkers.</p>
-<p>Output from <code>computePower()</code> can be saved as an object and assigned to the <code>outComputePower</code> input parameter. In this scenario, since <code>computePower()</code> was run multiple times to vary the controls:cases ratio, these multiple output objects can be read into the function as a list.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPowerTri</span>(<span class="dt">outComputePower =</span> <span class="kw">list</span>(pwr5to1, pwr3to1, pwr1to1),  <span class="co"># 'computePower' output lists</span>
+<p>Output from <code>computePower()</code> can be saved as an object and assigned to the <code>outComputePower</code> input parameter.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPowerTri</span>(<span class="dt">outComputePower =</span> pwr,  <span class="co"># 'computePower' output list of lists</span>
              <span class="dt">legendText =</span> <span class="kw">paste0</span>(<span class="st">&quot;Control:Case = &quot;</span>, <span class="kw">c</span>(<span class="st">&quot;5:1&quot;</span>, <span class="st">&quot;3:1&quot;</span>, <span class="st">&quot;1:1&quot;</span>)))</code></pre></div>
-<p>Alternatively, output from <code>computePower()</code> can be saved in an RData file. In this case, the <code>outComputePower</code> input parameter should be the name(s) of the output file(s), and the <code>outDir</code> input parameter should be the name(s) of the file location(s). For more information, visit the <code>plotPowerTri()</code> help page.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">computePower</span>(..., <span class="dt">saveDir =</span> <span class="st">&quot;myDir&quot;</span>, <span class="dt">saveFile =</span> <span class="st">&quot;myFile.RData&quot;</span>)
-<span class="kw">plotPowerTri</span>(<span class="dt">outComputePower =</span> <span class="kw">c</span>(<span class="st">&quot;myFile1&quot;</span>, <span class="st">&quot;myFile2&quot;</span>, <span class="st">&quot;myFile3&quot;</span>), <span class="co"># 'computePower' output files</span>
+<p>Alternatively, output from <code>computePower()</code> can be saved in RData files. In this case, the <code>outComputePower</code> input parameter should be the name(s) of the output file(s), and the <code>outDir</code> input parameter should be the name(s) of the file location(s). For more information, visit the <code>plotPowerTri()</code> help page.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">computePower</span>(..., <span class="dt">saveDir =</span> <span class="st">&quot;myDir&quot;</span>, <span class="dt">saveFile =</span> <span class="kw">c</span>(<span class="st">&quot;myFile1.RData&quot;</span>, <span class="st">&quot;myFile2.RData&quot;</span>, <span class="st">&quot;myFile3.RData&quot;</span>))
+<span class="kw">plotPowerTri</span>(<span class="dt">outComputePower =</span> <span class="kw">c</span>(<span class="st">&quot;myFile1.RData&quot;</span>, <span class="st">&quot;myFile2.RData&quot;</span>, <span class="st">&quot;myFile3.RData&quot;</span>), <span class="co"># 'computePower' output files</span>
              <span class="dt">outDir =</span> <span class="kw">rep</span>(<span class="st">&quot;~/myDir&quot;</span>, <span class="dv">3</span>),                           <span class="co"># path to each myFilex.RData</span>
              <span class="dt">legendText =</span> <span class="kw">paste0</span>(<span class="st">&quot;Control:Case = &quot;</span>, <span class="kw">c</span>(<span class="st">&quot;5:1&quot;</span>, <span class="st">&quot;3:1&quot;</span>, <span class="st">&quot;1:1&quot;</span>)))</code></pre></div>
 </div>
 </div>
-<div id="scenario-2-vary-sens-and-spec-approach-1-trichotomous-s-without-replacement-sampling" class="section level2">
-<h2><em>Scenario 2:</em> vary <span class="math inline">\(\, Sens\)</span> and <span class="math inline">\(\, Spec\)</span> (Approach 1) | Trichotomous <span class="math inline">\(\, S\)</span>, without replacement sampling</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pwr &lt;-<span class="st"> </span><span class="kw">computePower</span>(<span class="dt">nCases =</span> <span class="dv">32</span>,                 
-                    <span class="dt">nControls =</span> <span class="dv">3654</span>,            
-                    <span class="dt">nCasesWithS =</span> <span class="dv">32</span>,           
+<div id="scenario-2-vary-sens-and-spec-approach-1-trichotomous-s1-without-replacement-sampling" class="section level2">
+<h2><em>Scenario 2:</em> vary <span class="math inline">\(\, Sens\)</span> and <span class="math inline">\(\, Spec\)</span> (Approach 1) | Trichotomous <span class="math inline">\(\, S(1)\)</span>, without replacement sampling</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pwr &lt;-<span class="st"> </span><span class="kw">computePower</span>(<span class="dt">nCasesTx =</span> <span class="dv">32</span>,                 
+                    <span class="dt">nControlsTx =</span> <span class="dv">3654</span>,            
+                    <span class="dt">nCasesTxWithS =</span> <span class="dv">32</span>,           
                     <span class="dt">controlCaseRatio =</span> <span class="dv">5</span>,         <span class="co"># n^S_controls : n^S_cases ratio</span>
                     <span class="dt">VEoverall =</span> <span class="fl">0.75</span>,             <span class="co"># overall VE</span>
                     <span class="dt">risk0 =</span> <span class="fl">0.034</span>,                <span class="co"># placebo-group endpoint risk from tau - taumax</span>
@@ -354,44 +374,44 @@ n^S_{controls} &amp;= K n^S_{cases}
                     <span class="dt">P0 =</span> <span class="fl">0.2</span>,                     <span class="co"># probability of low biomarker response</span>
                     <span class="dt">P2 =</span> <span class="fl">0.6</span>,                     <span class="co"># probability of high biomarker response</span>
                     <span class="dt">sens =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="fl">0.9</span>, <span class="fl">0.8</span>, <span class="fl">0.7</span>), <span class="dt">spec =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="fl">0.9</span>, <span class="fl">0.8</span>, <span class="fl">0.7</span>), 
-                    <span class="dt">FP0 =</span> <span class="dv">0</span>, <span class="dt">FN2 =</span> <span class="dv">0</span>,
+                    <span class="dt">FP0 =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="dt">FN2 =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>),
                     <span class="dt">M =</span> <span class="dv">1000</span>,                     <span class="co"># number of simulated clinical trials</span>
                     <span class="dt">alpha =</span> <span class="fl">0.05</span>,                 <span class="co"># two-sided Wald test Type 1 error rate</span>
                     <span class="dt">biomType =</span> <span class="st">&quot;trichotomous&quot;</span>)    <span class="co"># &quot;continuous&quot; by default</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPowerTri</span>(<span class="dt">outComputePower =</span> pwr,    
              <span class="dt">legendText =</span> <span class="kw">paste0</span>(<span class="st">&quot;Sens = Spec = &quot;</span>, <span class="kw">c</span>(<span class="dv">1</span>, <span class="fl">0.9</span>, <span class="fl">0.8</span>, <span class="fl">0.7</span>)))</code></pre></div>
 </div>
-<div id="scenario-3-vary-plat_0-plat_2-p_0-p_2-approach-1-trichotomous-s-without-replacement-sampling" class="section level2">
-<h2><em>Scenario 3:</em> vary <span class="math inline">\(\, P^{lat}_0, P^{lat}_2, P_0, P_2\)</span> (Approach 1) | Trichotomous <span class="math inline">\(\, S\)</span>, without replacement sampling</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pwr &lt;-<span class="st"> </span><span class="kw">computePower</span>(<span class="dt">nCases =</span> <span class="dv">32</span>,                 
-                    <span class="dt">nControls =</span> <span class="dv">3654</span>,            
-                    <span class="dt">nCasesWithS =</span> <span class="dv">32</span>,           
+<div id="scenario-3-vary-plat_0-plat_2-p_0-p_2-approach-1-trichotomous-s1-without-replacement-sampling" class="section level2">
+<h2><em>Scenario 3:</em> vary <span class="math inline">\(\, P^{lat}_0, P^{lat}_2, P_0, P_2\)</span> (Approach 1) | Trichotomous <span class="math inline">\(\, S(1)\)</span>, without replacement sampling</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pwr &lt;-<span class="st"> </span><span class="kw">computePower</span>(<span class="dt">nCasesTx =</span> <span class="dv">32</span>,                 
+                    <span class="dt">nControlsTx =</span> <span class="dv">3654</span>,            
+                    <span class="dt">nCasesTxWithS =</span> <span class="dv">32</span>,           
                     <span class="dt">controlCaseRatio =</span> <span class="dv">5</span>,         <span class="co"># n^S_controls : n^S_cases ratio</span>
                     <span class="dt">VEoverall =</span> <span class="fl">0.75</span>,             <span class="co"># overall VE</span>
                     <span class="dt">risk0 =</span> <span class="fl">0.034</span>,                <span class="co"># placebo-group endpoint risk from tau - taumax</span>
                     <span class="dt">VElat0 =</span> <span class="kw">seq</span>(<span class="dv">0</span>, VEoverall, <span class="dt">len=</span><span class="dv">100</span>), <span class="co"># grid of VE (V/P) among lower protected</span>
                     <span class="dt">VElat1 =</span> <span class="kw">rep</span>(VEoverall, <span class="dv">100</span>), <span class="co"># grid of VE (V/P) among medium protected</span>
-                    <span class="dt">Plat0 =</span> <span class="fl">0.05</span>,               <span class="co"># scalar; separate calls for 0.05, 0.1, 0.15, 0.2</span>
-                    <span class="dt">Plat2 =</span> <span class="fl">0.15</span>,               <span class="co"># scalar; separate calls for 0.15, 0.3, 0.45, 0.6</span>
-                    <span class="dt">P0 =</span> <span class="fl">0.05</span>,                  <span class="co"># scalar; separate calls for 0.05, 0.1, 0.15, 0.2</span>
-                    <span class="dt">P2 =</span> <span class="fl">0.15</span>,                  <span class="co"># scalar; separate calls for 0.15, 0.3, 0.45, 0.6</span>
+                    <span class="dt">Plat0 =</span> <span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.1</span>, <span class="fl">0.15</span>, <span class="fl">0.2</span>),          
+                    <span class="dt">Plat2 =</span> <span class="kw">c</span>(<span class="fl">0.15</span>, <span class="fl">0.3</span>, <span class="fl">0.45</span>, <span class="fl">0.6</span>),          
+                    <span class="dt">P0 =</span> <span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.1</span>, <span class="fl">0.15</span>, <span class="fl">0.2</span>),            
+                    <span class="dt">P2 =</span> <span class="kw">c</span>(<span class="fl">0.15</span>, <span class="fl">0.3</span>, <span class="fl">0.45</span>, <span class="fl">0.6</span>),          
                     <span class="dt">sens =</span> <span class="fl">0.8</span>, <span class="dt">spec =</span> <span class="fl">0.8</span>, <span class="dt">FP0 =</span> <span class="dv">0</span>, <span class="dt">FN2 =</span> <span class="dv">0</span>,
                     <span class="dt">M =</span> <span class="dv">1000</span>,                     <span class="co"># number of simulated clinical trials</span>
                     <span class="dt">alpha =</span> <span class="fl">0.05</span>,                 <span class="co"># two-sided Wald test Type 1 error rate</span>
                     <span class="dt">biomType =</span> <span class="st">&quot;trichotomous&quot;</span>)    <span class="co"># &quot;continuous&quot; by default</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPowerTri</span>(<span class="dt">outComputePower =</span> <span class="kw">list</span>(pwr1, pwr2, pwr3, pwr4), 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPowerTri</span>(<span class="dt">outComputePower =</span> pwr, 
              <span class="dt">legendText =</span> <span class="kw">c</span>(<span class="st">&quot;Plat0=0.05, Plat2=0.15&quot;</span>, 
                             <span class="st">&quot;Plat0=0.1, Plat2=0.3&quot;</span>, 
                             <span class="st">&quot;Plat0=0.15, Plat2=0.45&quot;</span>, 
                             <span class="st">&quot;Plat0=0.2, Plat2=0.6&quot;</span>))</code></pre></div>
 </div>
-<div id="scenario-4-vary-rho-approach-2-trichotomous-s-without-replacement-sampling" class="section level2">
-<h2><em>Scenario 4:</em> vary <span class="math inline">\(\, \rho \)</span> (Approach 2) | Trichotomous <span class="math inline">\(\, S\)</span>, without replacement sampling</h2>
+<div id="scenario-4-vary-rho-approach-2-trichotomous-s1-without-replacement-sampling" class="section level2">
+<h2><em>Scenario 4:</em> vary <span class="math inline">\(\, \rho \)</span> (Approach 2) | Trichotomous <span class="math inline">\(\, S(1)\)</span>, without replacement sampling</h2>
 <div id="run-simulations-and-compute-power-with-computepower-1" class="section level3">
 <h3>Run simulations and compute power with <code>computePower()</code></h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pwr &lt;-<span class="st"> </span><span class="kw">computePower</span>(<span class="dt">nCases =</span> <span class="dv">32</span>,                 
-                    <span class="dt">nControls =</span> <span class="dv">3654</span>,            
-                    <span class="dt">nCasesWithS =</span> <span class="dv">32</span>,           
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pwr &lt;-<span class="st"> </span><span class="kw">computePower</span>(<span class="dt">nCasesTx =</span> <span class="dv">32</span>,                 
+                    <span class="dt">nControlsTx =</span> <span class="dv">3654</span>,            
+                    <span class="dt">nCasesTxWithS =</span> <span class="dv">32</span>,           
                     <span class="dt">controlCaseRatio =</span> <span class="dv">5</span>,         <span class="co"># n^S_controls : n^S_cases ratio</span>
                     <span class="dt">VEoverall =</span> <span class="fl">0.75</span>,             <span class="co"># overall VE</span>
                     <span class="dt">risk0 =</span> <span class="fl">0.034</span>,                <span class="co"># placebo-group endpoint risk from tau - taumax </span>
@@ -401,8 +421,8 @@ n^S_{controls} &amp;= K n^S_{cases}
                     <span class="dt">Plat2 =</span> <span class="fl">0.6</span>,                  <span class="co"># prevalence of higher protected</span>
                     <span class="dt">P0 =</span> <span class="fl">0.2</span>,                     <span class="co"># probability of low biomarker response</span>
                     <span class="dt">P2 =</span> <span class="fl">0.6</span>,                     <span class="co"># probability of high biomarker response</span>
-                    <span class="dt">sigma2obs =</span> <span class="dv">1</span>,                <span class="co"># variance of observed biomarker S</span>
-                    <span class="dt">rho =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="fl">0.9</span>, <span class="fl">0.7</span>, <span class="fl">0.5</span>),    <span class="co"># protection-relevant fraction of variance of S</span>
+                    <span class="dt">sigma2obs =</span> <span class="dv">1</span>,                <span class="co"># variance of observed biomarker S(1)</span>
+                    <span class="dt">rho =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="fl">0.9</span>, <span class="fl">0.7</span>, <span class="fl">0.5</span>),    <span class="co"># protection-relevant fraction of variance of S(1)</span>
                     <span class="dt">M =</span> <span class="dv">1000</span>,                     <span class="co"># number of simulated clinical trials</span>
                     <span class="dt">alpha =</span> <span class="fl">0.05</span>,                 <span class="co"># two-sided Wald test Type 1 error rate</span>
                     <span class="dt">biomType =</span> <span class="st">&quot;trichotomous&quot;</span>)    <span class="co"># &quot;continuous&quot; by default</span></code></pre></div>
@@ -416,11 +436,11 @@ n^S_{controls} &amp;= K n^S_{cases}
 <h3>Plot <span class="math inline">\(RR_t\)</span> vs. <span class="math inline">\(RR_2^{lat}/RR_0^{lat}\)</span> with <code>plotRRgradVE()</code></h3>
 <p><code>plotRRgradVE()</code> plots the ratio of relative risks for the higher and lower latent subgroups <span class="math inline">\(RR_2^{lat}/RR_0^{lat}\)</span> against the CoR relative risk effect size <span class="math inline">\(RR_t = risk_1(2)/risk_1(0)\)</span>.</p>
 <p>Output from <code>computePower()</code> can be saved as an object and assigned to the <code>outComputePower</code> input parameter.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotRRgradVE</span>(<span class="dt">outComputePower =</span> pwr,  <span class="co"># 'computePower' output list</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotRRgradVE</span>(<span class="dt">outComputePower =</span> pwr,  <span class="co"># 'computePower' output list of lists</span>
              <span class="dt">legendText =</span> <span class="kw">paste0</span>(<span class="st">&quot;rho = &quot;</span>, <span class="kw">c</span>(<span class="dv">1</span>, <span class="fl">0.9</span>, <span class="fl">0.7</span>, <span class="fl">0.5</span>)))</code></pre></div>
-<p>Alternatively, output from <code>computePower()</code> can be saved in an RData file. In this case, the <code>outComputePower</code> input parameter should be the name(s) of the output file(s), and the <code>outDir</code> input parameter should be the name(s) of the file location(s). For more information, visit the <code>plotRRgradVE()</code> help page.</p>
+<p>Alternatively, output from <code>computePower()</code> can be saved in RData files. In this case, the <code>outComputePower</code> input parameter should be the name(s) of the output file(s), and the <code>outDir</code> input parameter should be the name(s) of the file location(s). For more information, visit the <code>plotRRgradVE()</code> help page.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">computePower</span>(..., <span class="dt">saveDir =</span> <span class="st">&quot;myDir&quot;</span>, <span class="dt">saveFile =</span> <span class="st">&quot;myFile.RData&quot;</span>)
-<span class="kw">plotRRgradVE</span>(<span class="dt">outComputePower =</span> <span class="st">&quot;myFile&quot;</span>,    <span class="co"># file with 'computePower' output</span>
+<span class="kw">plotRRgradVE</span>(<span class="dt">outComputePower =</span> <span class="kw">paste0</span>(<span class="st">&quot;myFile_rho_&quot;</span>, <span class="kw">c</span>(<span class="dv">1</span>, <span class="fl">0.9</span>, <span class="fl">0.7</span>, <span class="fl">0.5</span>), <span class="st">&quot;.RData&quot;</span>),    <span class="co"># files with 'computePower' output</span>
              <span class="dt">outDir =</span> <span class="st">&quot;~/myDir&quot;</span>,            <span class="co"># path to myFile.RData</span>
              <span class="dt">legendText =</span> <span class="kw">paste0</span>(<span class="st">&quot;rho = &quot;</span>, <span class="kw">c</span>(<span class="dv">1</span>, <span class="fl">0.9</span>, <span class="fl">0.7</span>, <span class="fl">0.5</span>)))</code></pre></div>
 </div>
@@ -431,39 +451,39 @@ n^S_{controls} &amp;= K n^S_{cases}
                 <span class="dt">Plat2 =</span> <span class="kw">c</span>(<span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="fl">0.4</span>, <span class="fl">0.5</span>), 
                 <span class="dt">P0 =</span> <span class="kw">seq</span>(<span class="fl">0.90</span>, <span class="fl">0.10</span>, <span class="dt">len=</span><span class="dv">25</span>), 
                 <span class="dt">P2 =</span> <span class="kw">seq</span>(<span class="fl">0.10</span>, <span class="fl">0.90</span>, <span class="dt">len=</span><span class="dv">25</span>), 
-                <span class="dt">rho =</span> <span class="kw">c</span>(<span class="st">`</span><span class="dt">, 0.9, 0.7, 0.5))</span></code></pre></div>
+                <span class="dt">rho =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="fl">0.9</span>, <span class="fl">0.7</span>, <span class="fl">0.5</span>))</code></pre></div>
 </div>
 </div>
-<div id="scenario-5-vary-plat_0-p_0-plat_2-p_2-approach-2-trichotomous-s-without-replacement-sampling" class="section level2">
-<h2><em>Scenario 5:</em> vary <span class="math inline">\(\, P^{lat}_0, P_0, P^{lat}_2, P_2 \)</span> (Approach 2) | Trichotomous <span class="math inline">\(\, S\)</span>, without replacement sampling</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pwr &lt;-<span class="st"> </span><span class="kw">computePower</span>(<span class="dt">nCases =</span> <span class="dv">32</span>,                 
-                    <span class="dt">nControls =</span> <span class="dv">3654</span>,            
-                    <span class="dt">nCasesWithS =</span> <span class="dv">32</span>,           
+<div id="scenario-5-vary-plat_0-p_0-plat_2-p_2-approach-2-trichotomous-s1-without-replacement-sampling" class="section level2">
+<h2><em>Scenario 5:</em> vary <span class="math inline">\(\, P^{lat}_0, P_0, P^{lat}_2, P_2 \)</span> (Approach 2) | Trichotomous <span class="math inline">\(\, S(1)\)</span>, without replacement sampling</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pwr &lt;-<span class="st"> </span><span class="kw">computePower</span>(<span class="dt">nCasesTx =</span> <span class="dv">32</span>,                 
+                    <span class="dt">nControlsTx =</span> <span class="dv">3654</span>,            
+                    <span class="dt">nCasesTxWithS =</span> <span class="dv">32</span>,           
                     <span class="dt">controlCaseRatio =</span> <span class="dv">5</span>,         <span class="co"># n^S_controls : n^S_cases ratio</span>
                     <span class="dt">VEoverall =</span> <span class="fl">0.75</span>,             <span class="co"># overall VE</span>
                     <span class="dt">risk0 =</span> <span class="fl">0.034</span>,                <span class="co"># placebo-group endpoint risk from tau - taumax </span>
                     <span class="dt">VElat0 =</span> <span class="kw">seq</span>(<span class="dv">0</span>, VEoverall, <span class="dt">len=</span><span class="dv">100</span>), <span class="co"># grid of VE (V/P) among lower protected</span>
                     <span class="dt">VElat1 =</span> <span class="kw">rep</span>(VEoverall, <span class="dv">100</span>), <span class="co"># grid of VE (V/P) among medium protected</span>
-                    <span class="dt">Plat0 =</span> <span class="fl">0.05</span>,               <span class="co"># scalar; separate calls for 0.05, 0.1, 0.15, 0.2</span>
-                    <span class="dt">Plat2 =</span> <span class="fl">0.15</span>,               <span class="co"># scalar; separate calls for 0.15, 0.3, 0.45, 0.6</span>
-                    <span class="dt">P0 =</span> <span class="fl">0.05</span>,                  <span class="co"># scalar; separate calls for 0.05, 0.1, 0.15, 0.2</span>
-                    <span class="dt">P2 =</span> <span class="fl">0.15</span>,                  <span class="co"># scalar; separate calls for 0.15, 0.3, 0.45, 0.6</span>
-                    <span class="dt">sigma2obs =</span> <span class="dv">1</span>,                <span class="co"># variance of observed biomarker S</span>
-                    <span class="dt">rho =</span> <span class="fl">0.9</span>,                    <span class="co"># protection-relevant fraction of variance of S</span>
+                    <span class="dt">Plat0 =</span> <span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.1</span>, <span class="fl">0.15</span>, <span class="fl">0.2</span>),          
+                    <span class="dt">Plat2 =</span> <span class="kw">c</span>(<span class="fl">0.15</span>, <span class="fl">0.3</span>, <span class="fl">0.45</span>, <span class="fl">0.6</span>),          
+                    <span class="dt">P0 =</span> <span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.1</span>, <span class="fl">0.15</span>, <span class="fl">0.2</span>),            
+                    <span class="dt">P2 =</span> <span class="kw">c</span>(<span class="fl">0.15</span>, <span class="fl">0.3</span>, <span class="fl">0.45</span>, <span class="fl">0.6</span>), 
+                    <span class="dt">sigma2obs =</span> <span class="dv">1</span>,                <span class="co"># variance of observed biomarker S(1)</span>
+                    <span class="dt">rho =</span> <span class="fl">0.9</span>,                    <span class="co"># protection-relevant fraction of variance of S(1)</span>
                     <span class="dt">M =</span> <span class="dv">1000</span>,                     <span class="co"># number of simulated clinical trials</span>
                     <span class="dt">alpha =</span> <span class="fl">0.05</span>,                 <span class="co"># two-sided Wald test Type 1 error rate</span>
                     <span class="dt">biomType =</span> <span class="st">&quot;trichotomous&quot;</span>)    <span class="co"># &quot;continuous&quot; by default</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPowerTri</span>(<span class="dt">outComputePower =</span> <span class="kw">list</span>(pwr1, pwr2, pwr3, pwr4),  
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPowerTri</span>(<span class="dt">outComputePower =</span> pwr,  
              <span class="dt">legendText =</span> <span class="kw">c</span>(<span class="st">&quot;Plat0=0.05, Plat2=0.15&quot;</span>, 
                             <span class="st">&quot;Plat0=0.1, Plat2=0.3&quot;</span>, 
                             <span class="st">&quot;Plat0=0.15, Plat2=0.45&quot;</span>, 
                             <span class="st">&quot;Plat0=0.2, Plat2=0.6&quot;</span>))</code></pre></div>
 </div>
-<div id="scenario-6-vary-n_cases-approach-2-trichotomous-s-without-replacement-sampling" class="section level2">
-<h2><em>Scenario 6:</em> vary <span class="math inline">\(\, n_{cases}\)</span> (Approach 2) | Trichotomous <span class="math inline">\(\, S\)</span>, without replacement sampling</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pwr &lt;-<span class="st"> </span><span class="kw">computePower</span>(<span class="dt">nCases =</span> <span class="kw">c</span>(<span class="dv">25</span>, <span class="dv">32</span>, <span class="dv">35</span>, <span class="dv">40</span>),             
-                    <span class="dt">nControls =</span> <span class="kw">c</span>(<span class="dv">3661</span>, <span class="dv">3654</span>, <span class="dv">3651</span>, <span class="dv">3646</span>),  
-                    <span class="dt">nCasesWithS =</span> <span class="kw">c</span>(<span class="dv">25</span>, <span class="dv">32</span>, <span class="dv">35</span>, <span class="dv">40</span>),       
+<div id="scenario-6-vary-n_cases1-approach-2-trichotomous-s1-without-replacement-sampling" class="section level2">
+<h2><em>Scenario 6:</em> vary <span class="math inline">\(\, n_{cases,1}\)</span> (Approach 2) | Trichotomous <span class="math inline">\(\, S(1)\)</span>, without replacement sampling</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pwr &lt;-<span class="st"> </span><span class="kw">computePower</span>(<span class="dt">nCasesTx =</span> <span class="kw">c</span>(<span class="dv">25</span>, <span class="dv">32</span>, <span class="dv">35</span>, <span class="dv">40</span>),             
+                    <span class="dt">nControlsTx =</span> <span class="kw">c</span>(<span class="dv">3661</span>, <span class="dv">3654</span>, <span class="dv">3651</span>, <span class="dv">3646</span>),  
+                    <span class="dt">nCasesTxWithS =</span> <span class="kw">c</span>(<span class="dv">25</span>, <span class="dv">32</span>, <span class="dv">35</span>, <span class="dv">40</span>),       
                     <span class="dt">controlCaseRatio =</span> <span class="dv">5</span>,         <span class="co"># n^S_controls : n^S_cases ratio</span>
                     <span class="dt">VEoverall =</span> <span class="fl">0.75</span>,             <span class="co"># overall VE</span>
                     <span class="dt">risk0 =</span> <span class="fl">0.034</span>,                <span class="co"># placebo-group endpoint risk fom tau - taumax</span>
@@ -473,16 +493,16 @@ n^S_{controls} &amp;= K n^S_{cases}
                     <span class="dt">Plat2 =</span> <span class="fl">0.6</span>,                  <span class="co"># prevalence of higher protected</span>
                     <span class="dt">P0 =</span> <span class="fl">0.2</span>,                     <span class="co"># probability of low biomarker response</span>
                     <span class="dt">P2 =</span> <span class="fl">0.6</span>,                     <span class="co"># probability of high biomarker response</span>
-                    <span class="dt">sigma2obs =</span> <span class="dv">1</span>,                <span class="co"># variance of observed biomarker S</span>
-                    <span class="dt">rho =</span> <span class="fl">0.9</span>,                    <span class="co"># protection-relevant fraction of variance of S</span>
+                    <span class="dt">sigma2obs =</span> <span class="dv">1</span>,                <span class="co"># variance of observed biomarker S(1)</span>
+                    <span class="dt">rho =</span> <span class="fl">0.9</span>,                    <span class="co"># protection-relevant fraction of variance of S(1)</span>
                     <span class="dt">M =</span> <span class="dv">1000</span>,                     <span class="co"># number of simulated clinical trials</span>
                     <span class="dt">alpha =</span> <span class="fl">0.05</span>,                 <span class="co"># two-sided Wald test Type 1 error rate</span>
                     <span class="dt">biomType =</span> <span class="st">&quot;trichotomous&quot;</span>)    <span class="co"># &quot;continuous&quot; by default</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPowerTri</span>(<span class="dt">outComputePower =</span> pwr,   
-             <span class="dt">legendText =</span> <span class="kw">paste0</span>(<span class="st">&quot;nCases = &quot;</span>, <span class="kw">c</span>(<span class="dv">25</span>, <span class="dv">32</span>, <span class="dv">35</span>, <span class="dv">40</span>)))</code></pre></div>
+             <span class="dt">legendText =</span> <span class="kw">paste0</span>(<span class="st">&quot;nCasesTx = &quot;</span>, <span class="kw">c</span>(<span class="dv">25</span>, <span class="dv">32</span>, <span class="dv">35</span>, <span class="dv">40</span>)))</code></pre></div>
 </div>
-<div id="illustration-corpower-for-binary-s-without-replacement-sampling" class="section level2">
-<h2>Illustration: <code>CoRpower</code> for binary <span class="math inline">\(\, S\)</span> | Without replacement sampling</h2>
+<div id="illustration-corpower-for-binary-s1-without-replacement-sampling" class="section level2">
+<h2>Illustration: <code>CoRpower</code> for binary <span class="math inline">\(\, S(1)\)</span> | Without replacement sampling</h2>
 <p>Achieved by selecting <span class="math inline">\(P_0^{lat}\)</span>, <span class="math inline">\(P_2^{lat}\)</span>, <span class="math inline">\(P_0\)</span>, <span class="math inline">\(P_2\)</span> such that <span class="math display">\[
 \begin{align}
 P_0^{lat} + P_2^{lat} &amp;= 1\\
@@ -491,16 +511,16 @@ P_0 + P_2 &amp;= 1
 \]</span></p>
 <p><strong>Approach 2</strong> <span class="math inline">\((\sigma^2_{obs}\)</span> and <span class="math inline">\(\rho\)</span> specified<span class="math inline">\()\)</span></p>
 <ul>
-<li><strong>Scenario 7:</strong> vary <span class="math inline">\(n_{cases}\)</span></li>
+<li><strong>Scenario 7:</strong> vary <span class="math inline">\(n_{cases,1}\)</span></li>
 </ul>
 </div>
-<div id="scenario-7-vary-n_cases-approach-2-binary-s-without-replacement-sampling" class="section level2">
-<h2><strong>Scenario 7:</strong> vary <span class="math inline">\(\, n_{cases}\)</span> (Approach 2) | Binary <span class="math inline">\(\, S\)</span>, without replacement sampling</h2>
+<div id="scenario-7-vary-n_cases1-approach-2-binary-s1-without-replacement-sampling" class="section level2">
+<h2><strong>Scenario 7:</strong> vary <span class="math inline">\(\, n_{cases,1}\)</span> (Approach 2) | Binary <span class="math inline">\(\, S(1)\)</span>, without replacement sampling</h2>
 <div id="run-simulations-and-compute-power-with-computepower-2" class="section level3">
 <h3>Run simulations and compute power with <code>computePower()</code></h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pwr &lt;-<span class="st"> </span><span class="kw">computePower</span>(<span class="dt">nCases =</span> <span class="kw">c</span>(<span class="dv">25</span>, <span class="dv">32</span>, <span class="dv">35</span>, <span class="dv">40</span>),             
-                    <span class="dt">nControls =</span> <span class="kw">c</span>(<span class="dv">3661</span>, <span class="dv">3654</span>, <span class="dv">3651</span>, <span class="dv">3646</span>),  
-                    <span class="dt">nCasesWithS =</span> <span class="kw">c</span>(<span class="dv">25</span>, <span class="dv">32</span>, <span class="dv">35</span>, <span class="dv">40</span>),       
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pwr &lt;-<span class="st"> </span><span class="kw">computePower</span>(<span class="dt">nCasesTx =</span> <span class="kw">c</span>(<span class="dv">25</span>, <span class="dv">32</span>, <span class="dv">35</span>, <span class="dv">40</span>),             
+                    <span class="dt">nControlsTx =</span> <span class="kw">c</span>(<span class="dv">3661</span>, <span class="dv">3654</span>, <span class="dv">3651</span>, <span class="dv">3646</span>),  
+                    <span class="dt">nCasesTxWithS =</span> <span class="kw">c</span>(<span class="dv">25</span>, <span class="dv">32</span>, <span class="dv">35</span>, <span class="dv">40</span>),       
                     <span class="dt">controlCaseRatio =</span> <span class="dv">5</span>,         <span class="co"># n^S_controls : n^S_cases ratio</span>
                     <span class="dt">VEoverall =</span> <span class="fl">0.75</span>,             <span class="co"># overall VE</span>
                     <span class="dt">risk0 =</span> <span class="fl">0.034</span>,                <span class="co"># placebo-group endpoint risk from tau - taumax</span>
@@ -510,8 +530,8 @@ P_0 + P_2 &amp;= 1
                     <span class="dt">Plat2 =</span> <span class="fl">0.8</span>,                  <span class="co"># prevalence of higher protected</span>
                     <span class="dt">P0 =</span> <span class="fl">0.2</span>,                     <span class="co"># probability of low biomarker response</span>
                     <span class="dt">P2 =</span> <span class="fl">0.8</span>,                     <span class="co"># probability of high biomarker response</span>
-                    <span class="dt">sigma2obs =</span> <span class="dv">1</span>,                <span class="co"># variance of observed biomarker S</span>
-                    <span class="dt">rho =</span> <span class="fl">0.9</span>,                    <span class="co"># protection-relevant fraction of variance of S</span>
+                    <span class="dt">sigma2obs =</span> <span class="dv">1</span>,                <span class="co"># variance of observed biomarker S(1)</span>
+                    <span class="dt">rho =</span> <span class="fl">0.9</span>,                    <span class="co"># protection-relevant fraction of variance of S(1)</span>
                     <span class="dt">M =</span> <span class="dv">1000</span>,                     <span class="co"># number of simulated clinical trials</span>
                     <span class="dt">alpha =</span> <span class="fl">0.05</span>,                 <span class="co"># two-sided Wald test Type 1 error rate</span>
                     <span class="dt">biomType =</span> <span class="st">&quot;binary&quot;</span>)          <span class="co"># &quot;continuous&quot; by default</span></code></pre></div>
@@ -519,11 +539,11 @@ P_0 + P_2 &amp;= 1
 <div id="plot-power-curves-with-plotpowertri-2" class="section level3">
 <h3>Plot power curves with <code>plotPowerTri()</code></h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPowerTri</span>(<span class="dt">outComputePower =</span> pwr,   
-             <span class="dt">legendText =</span> <span class="kw">paste0</span>(<span class="st">&quot;nCases = &quot;</span>, <span class="kw">c</span>(<span class="dv">25</span>, <span class="dv">32</span>, <span class="dv">35</span>, <span class="dv">40</span>)))</code></pre></div>
+             <span class="dt">legendText =</span> <span class="kw">paste0</span>(<span class="st">&quot;nCasesTx = &quot;</span>, <span class="kw">c</span>(<span class="dv">25</span>, <span class="dv">32</span>, <span class="dv">35</span>, <span class="dv">40</span>)))</code></pre></div>
 </div>
 </div>
-<div id="algorithm-for-continuous-biomarker-sast-without-replacement-sampling" class="section level2">
-<h2>Algorithm for continuous biomarker <span class="math inline">\(\, S^{\ast}\)</span> | Without replacement sampling</h2>
+<div id="algorithm-for-continuous-biomarker-sast1-without-replacement-sampling" class="section level2">
+<h2>Algorithm for continuous biomarker <span class="math inline">\(\, S^{\ast}(1)\)</span> | Without replacement sampling</h2>
 <ol>
 <li>
 Specify overall <span class="math inline">\(VE\)</span> between <span class="math inline">\(\tau\)</span> and <span class="math inline">\(\tau_{\mathrm{max}}\)</span>
@@ -559,39 +579,39 @@ Simulate <span class="math inline">\(M\)</span> data sets under the true paramet
 <ol type="a">
 <em>Full data</em>
 <li>
-Sample <span class="math inline">\(X^{\ast}\)</span> for <span class="math inline">\(n_{cases}\)</span> cases from <span class="math inline">\(f_{X^{\ast}}(x^{\ast}|Y=1,Y^{\tau}=0,Z=1)\)</span> using Bayes rule
+Sample <span class="math inline">\(X^{\ast}\)</span> for <span class="math inline">\(n_{cases,1}\)</span> cases from <span class="math inline">\(f_{X^{\ast}}(x^{\ast}|Y=1,Y^{\tau}=0,Z=1)\)</span> using Bayes rule
 <li>
-Sample <span class="math inline">\(X^{\ast}\)</span> for <span class="math inline">\(n_{controls}\)</span> controls from <span class="math inline">\(f_{X^{\ast}}(x^{\ast}|Y=0,Y^{\tau}=0,Z=1)\)</span> using Bayes rule <br> - How? Use a fine grid of <span class="math inline">\(\widetilde{x}^{\ast}\)</span> values and then <br> <span class="math inline">\(\;\;\)</span><code>sample(</code><span class="math inline">\(\widetilde{x}^{\ast}\)</span>, <code>prob=</code><span class="math inline">\(f_{X^{\ast}}(\widetilde{x}^{\ast}|Y=\cdot,Y^{\tau}=0,Z=1)\)</span>, <code>replace=TRUE)</code>
+Sample <span class="math inline">\(X^{\ast}\)</span> for <span class="math inline">\(n_{controls,1}\)</span> controls from <span class="math inline">\(f_{X^{\ast}}(x^{\ast}|Y=0,Y^{\tau}=0,Z=1)\)</span> using Bayes rule <br> - How? Use a fine grid of <span class="math inline">\(\widetilde{x}^{\ast}\)</span> values and then <br> <span class="math inline">\(\;\;\)</span><code>sample(</code><span class="math inline">\(\widetilde{x}^{\ast}\)</span>, <code>prob=</code><span class="math inline">\(f_{X^{\ast}}(\widetilde{x}^{\ast}|Y=\cdot,Y^{\tau}=0,Z=1)\)</span>, <code>replace=TRUE)</code>
 <li>
-Sample <span class="math inline">\(S^{\ast}\)</span> following <span class="math inline">\(S^{\ast} = X^{\ast} + e\)</span>
+Sample <span class="math inline">\(S^{\ast}(1)\)</span> following <span class="math inline">\(S^{\ast}(1) = X^{\ast} + e\)</span>
 </li>
 <em>Observed data</em>
 <li>
-Sample without replacement <span class="math inline">\(n^S_{cases}\)</span> and <span class="math inline">\(n^S_{controls} = K n^S_{cases}\)</span> controls with measured <span class="math inline">\(S^{\ast}\)</span> <span class="math inline">\((R=1)\)</span>
+Sample without replacement <span class="math inline">\(n^S_{cases,1}\)</span> and <span class="math inline">\(n^S_{controls,1} = K n^S_{cases,1}\)</span> controls with measured <span class="math inline">\(S^{\ast}(1)\)</span> <span class="math inline">\((R=1)\)</span>
 </ol>
 </li>
 <li>
-For each observed data set, compute the 1-sided one-degree-of-freedom Wald test statistic for <span class="math inline">\(H_0 \Leftrightarrow \{\widetilde{H}_0: \beta_{S^{\ast}} \geq 0\}\)</span> from IPW logistic regression model that accounts for biomarker sampling design (function <code>tps</code> in R package <code>osDesign</code>)
+For each observed data set, compute the 1-sided one-degree-of-freedom Wald test statistic for <span class="math inline">\(H_0 \Leftrightarrow \{\widetilde{H}_0: \beta_{S^{\ast}(1)} \geq 0\}\)</span> from IPW logistic regression model that accounts for biomarker sampling design (function <code>tps</code> in R package <code>osDesign</code>)
 <li>
 Compute power as proportion of data sets with 1-sided Wald test <span class="math inline">\(p \leq \alpha/2\)</span> for specified <span class="math inline">\(\alpha\)</span>
 <li>
-Repeat power calculation varying control:case ratio, <span class="math inline">\(n_{cases}\)</span>, <span class="math inline">\(n^S_{cases}\)</span>, <span class="math inline">\(P^{lat}_{lowestVE}\)</span>, <span class="math inline">\(\rho\)</span>
+Repeat power calculation varying control:case ratio, <span class="math inline">\(n_{cases,1}\)</span>, <span class="math inline">\(n^S_{cases,1}\)</span>, <span class="math inline">\(P^{lat}_{lowestVE}\)</span>, <span class="math inline">\(\rho\)</span>
 </ol>
 </div>
-<div id="illustration-corpower-for-continuous-sast-without-replacement-sampling" class="section level2">
-<h2>Illustration: <code>CoRpower</code> for continuous <span class="math inline">\(\, S^{\ast}\)</span> | Without replacement sampling</h2>
+<div id="illustration-corpower-for-continuous-sast1-without-replacement-sampling" class="section level2">
+<h2>Illustration: <code>CoRpower</code> for continuous <span class="math inline">\(\, S^{\ast}(1)\)</span> | Without replacement sampling</h2>
 <ul>
 <li><strong>Scenario 8:</strong> vary <span class="math inline">\(\rho\)</span></li>
 <li><strong>Scenario 9:</strong> vary <span class="math inline">\(P_{lowestVE}^{lat}\)</span></li>
 </ul>
 </div>
-<div id="scenario-8-vary-rho-continuous-sast-without-replacement-sampling" class="section level2">
-<h2><em>Scenario 8:</em> vary <span class="math inline">\(\, \rho \)</span> | Continuous <span class="math inline">\(\, S^{\ast}\)</span>, without replacement sampling</h2>
+<div id="scenario-8-vary-rho-continuous-sast1-without-replacement-sampling" class="section level2">
+<h2><em>Scenario 8:</em> vary <span class="math inline">\(\, \rho \)</span> | Continuous <span class="math inline">\(\, S^{\ast}(1)\)</span>, without replacement sampling</h2>
 <div id="run-simulations-and-compute-power-with-computepower-3" class="section level3">
 <h3>Run simulations and compute power with <code>computePower()</code></h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pwr &lt;-<span class="st"> </span><span class="kw">computePower</span>(<span class="dt">nCases =</span> <span class="dv">32</span>,             
-                    <span class="dt">nControls =</span> <span class="dv">3654</span>,         
-                    <span class="dt">nCasesWithS =</span> <span class="dv">32</span>,         
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pwr &lt;-<span class="st"> </span><span class="kw">computePower</span>(<span class="dt">nCasesTx =</span> <span class="dv">32</span>,             
+                    <span class="dt">nControlsTx =</span> <span class="dv">3654</span>,         
+                    <span class="dt">nCasesTxWithS =</span> <span class="dv">32</span>,         
                     <span class="dt">controlCaseRatio =</span> <span class="dv">5</span>,        <span class="co"># n^S_controls : n^S_cases ratio</span>
                     <span class="dt">VEoverall =</span> <span class="fl">0.75</span>,            <span class="co"># overall VE</span>
                     <span class="dt">risk0 =</span> <span class="fl">0.034</span>,               <span class="co"># placebo-group endpoint risk from tau - taumax</span>
@@ -607,86 +627,86 @@ Repeat power calculation varying control:case ratio, <span class="math inline">\
 <h3>Plot power curves with <code>plotPowerCont()</code></h3>
 <p><code>plotPowerCont()</code> plots the power curve against the CoR relative risk, <span class="math inline">\(RR_c\)</span>, for continuous biomarkers.</p>
 <p>Output from <code>computePower()</code> can be saved as an object and assigned to the <code>outComputePower</code> input parameter. In this scenario, since <code>computePower()</code> was run multiple times to vary the controls:cases ratio, these multiple output objects can be read into the function as a list.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPowerCont</span>(<span class="dt">outComputePower =</span> pwr,          <span class="co"># output list from 'computePower'</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPowerCont</span>(<span class="dt">outComputePower =</span> pwr,          <span class="co"># output list of lists from 'computePower'</span>
               <span class="dt">legendText =</span> <span class="kw">paste0</span>(<span class="st">&quot;rho = &quot;</span>, <span class="kw">c</span>(<span class="dv">1</span>, <span class="fl">0.9</span>, <span class="fl">0.7</span>, <span class="fl">0.5</span>)))</code></pre></div>
-<p>Alternatively, output from <code>computePower()</code> can be saved in an RData file. In this case, the <code>outComputePower</code> input parameter should be the name(s) of the output file(s), and the <code>outDir</code> input parameter should be the name(s) of the file location(s). For more information, visit the <code>plotPowerCont()</code> help page.</p>
+<p>Alternatively, output from <code>computePower()</code> can be saved in RData files. In this case, the <code>outComputePower</code> input parameter should be the name(s) of the output file(s), and the <code>outDir</code> input parameter should be the name(s) of the file location(s). For more information, visit the <code>plotPowerCont()</code> help page.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">computePower</span>(..., <span class="dt">saveDir =</span> <span class="st">&quot;myDir&quot;</span>, <span class="dt">saveFile =</span> <span class="st">&quot;myFile.RData&quot;</span>)
-<span class="kw">plotPowerCont</span>(<span class="dt">outComputePower =</span> <span class="st">&quot;myFile&quot;</span>,     <span class="co"># file with 'computePower' output</span>
+<span class="kw">plotPowerCont</span>(<span class="dt">outComputePower =</span> <span class="kw">paste0</span>(<span class="st">&quot;myFile_rho_&quot;</span>, <span class="kw">c</span>(<span class="dv">1</span>, <span class="fl">0.9</span>, <span class="fl">0.7</span>, <span class="fl">0.5</span>), <span class="st">&quot;.RData&quot;</span>),     <span class="co"># files with 'computePower' output</span>
               <span class="dt">outDir =</span> <span class="st">&quot;~/myDir&quot;</span>,             <span class="co"># path to myFile.RData</span>
               <span class="dt">legendText =</span> <span class="kw">paste0</span>(<span class="st">&quot;rho = &quot;</span>, <span class="kw">c</span>(<span class="dv">1</span>, <span class="fl">0.9</span>, <span class="fl">0.7</span>, <span class="fl">0.5</span>)))</code></pre></div>
 </div>
 <div id="plot-velat_xast-curves-with-plotvelatcont" class="section level3">
 <h3>Plot <span class="math inline">\(VE^{lat}_{x^{\ast}}\)</span> curves with <code>plotVElatCont()</code></h3>
 <p><code>plotVElatCont()</code> plots the vaccine efficacy (VE) curve for the true biomarker X<em>=x</em> for eight different values of the true CoR relative risk, , in vaccine recipients and the lowest vaccine efficacy level for the true biomarker, .</p>
-<p><code>outComputePower</code> contains output from a single run of <code>computePower()</code>. This output can be in the form of an assigned object, which is a list, or a character string specifying the file containing the output. Unlike <code>plotPowerTri()</code> and <code>plotPowerCont()</code>, which can take in output from multiple runs of <code>computePower()</code> in the form of a list of lists or a character vector, this function can only take a single list or character string. For more information, visit the <code>plotVElatCont()</code> help page.</p>
+<p><code>outComputePower</code> contains output from a single run of <code>computePower()</code> with no varying argument (i.e., no vectorized input parameters other than <span class="math inline">\(VE^{lat}_0\)</span>, <span class="math inline">\(VE^{lat}_1\)</span>, and ). This output can be in the form of an assigned object, which is a list of lists of length <span class="math inline">\(1\)</span>, or a character string specifying the file containing the output. Note that this is unlike <code>plotPowerTri()</code> and <code>plotPowerCont()</code>, which can take in output from <code>computePower()</code> in the form of a list of lists of length greater than <span class="math inline">\(1\)</span> or a character vector. For more information, visit the <code>plotVElatCont()</code> help page.</p>
 <p>Using the function when <code>computePower()</code> output is saved as list object <code>pwr</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotVElatCont</span>(<span class="dt">outComputePower =</span> pwr)  </code></pre></div>
 <p>Using the function when <code>computePower()</code> output is saved in a file with name “myFile” and location “~/myDir”:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">computePower</span>(..., <span class="dt">saveDir =</span> <span class="st">&quot;myDir&quot;</span>, <span class="dt">saveFile =</span> <span class="st">&quot;myFile.RData&quot;</span>)
-<span class="kw">plotVElatCont</span>(<span class="dt">outComputePower =</span> <span class="st">&quot;myFile&quot;</span>,   
+<span class="kw">plotVElatCont</span>(<span class="dt">outComputePower =</span> <span class="st">&quot;myFile.RData&quot;</span>,   
               <span class="dt">outDir =</span> <span class="st">&quot;~/myDir&quot;</span>)          </code></pre></div>
 </div>
 </div>
-<div id="scenario-9-vary-p_lowestvelat-continuous-sast-without-replacement-sampling" class="section level2">
-<h2><em>Scenario 9:</em> vary <span class="math inline">\(\, P_{lowestVE}^{lat} \)</span> | Continuous <span class="math inline">\(\, S^{\ast}\)</span>, without replacement sampling</h2>
+<div id="scenario-9-vary-p_lowestvelat-continuous-sast1-without-replacement-sampling" class="section level2">
+<h2><em>Scenario 9:</em> vary <span class="math inline">\(\, P_{lowestVE}^{lat} \)</span> | Continuous <span class="math inline">\(\, S^{\ast}(1)\)</span>, without replacement sampling</h2>
 <div id="run-simulations-and-compute-power-with-computepower-4" class="section level3">
 <h3>Run simulations and compute power with <code>computePower()</code></h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pwr &lt;-<span class="st"> </span><span class="kw">computePower</span>(<span class="dt">nCases =</span> <span class="dv">32</span>,               
-                    <span class="dt">nControls =</span> <span class="dv">3654</span>,         
-                    <span class="dt">nCasesWithS =</span> <span class="dv">32</span>,         
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pwr &lt;-<span class="st"> </span><span class="kw">computePower</span>(<span class="dt">nCasesTx =</span> <span class="dv">32</span>,               
+                    <span class="dt">nControlsTx =</span> <span class="dv">3654</span>,         
+                    <span class="dt">nCasesTxWithS =</span> <span class="dv">32</span>,         
                     <span class="dt">controlCaseRatio =</span> <span class="dv">5</span>,        <span class="co"># n^S_controls : n^S_cases ratio</span>
                     <span class="dt">VEoverall =</span> <span class="fl">0.75</span>,            <span class="co"># overall VE</span>
                     <span class="dt">risk0 =</span> <span class="fl">0.034</span>,               <span class="co"># placebo-group endpoint risk from tau - taumax</span>
-                    <span class="dt">PlatVElowest =</span> <span class="fl">0.05</span>,         <span class="co"># scalar; separate calls for 0.05, 0.1, 0.15, 0.2</span>
+                    <span class="dt">PlatVElowest =</span> <span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.1</span>, <span class="fl">0.15</span>, <span class="fl">0.2</span>),         
                     <span class="dt">VElowest =</span> <span class="kw">seq</span>(<span class="dv">0</span>, VEoverall, <span class="dt">len=</span><span class="dv">100</span>), <span class="co"># lowest VE for true biomarker X*&lt;=nu</span>
-                    <span class="dt">sigma2obs =</span> <span class="dv">1</span>,               <span class="co"># variance of observed biomarker S</span>
-                    <span class="dt">rho =</span> <span class="fl">0.9</span>                    <span class="co"># protection-relevant fraction of variance of S</span>
+                    <span class="dt">sigma2obs =</span> <span class="dv">1</span>,               <span class="co"># variance of observed biomarker S(1)</span>
+                    <span class="dt">rho =</span> <span class="fl">0.9</span>                    <span class="co"># protection-relevant fraction of variance of S(1)</span>
                     <span class="dt">M =</span> <span class="dv">1000</span>,                    <span class="co"># number of simulated clinical trials</span>
                     <span class="dt">alpha =</span> <span class="fl">0.05</span>,                <span class="co"># two-sided Wald test Type 1 error rate</span>
                     <span class="dt">biomType =</span> <span class="st">&quot;continuous&quot;</span>)     <span class="co"># &quot;continuous&quot; by default</span></code></pre></div>
 </div>
 <div id="plot-power-curves-with-plotpowercont-1" class="section level3">
 <h3>Plot power curves with <code>plotPowerCont()</code></h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPowerCont</span>(<span class="dt">outComputePower =</span> <span class="kw">list</span>(pwr1, pwr2, pwr3, pwr4),          <span class="co"># output list from 'computePower'</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPowerCont</span>(<span class="dt">outComputePower =</span> pwr,          <span class="co"># output list of lists from 'computePower'</span>
               <span class="dt">legendText =</span> <span class="kw">paste0</span>(<span class="st">&quot;PlatVElowest = &quot;</span>, <span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.1</span>, <span class="fl">0.15</span>, <span class="fl">0.2</span>)))</code></pre></div>
 </div>
 </div>
-<div id="bernoulli-case-cohort-sampling-of-s-or-sast" class="section level2">
-<h2>Bernoulli / case-cohort sampling of <span class="math inline">\(\, S\)</span> (or <span class="math inline">\(\, S^{\ast}\)</span>)</h2>
+<div id="bernoulli-case-cohort-sampling-of-s1-or-sast1" class="section level2">
+<h2>Bernoulli / case-cohort sampling of <span class="math inline">\(\, S(1)\)</span> (or <span class="math inline">\(\, S^{\ast}(1)\)</span>)</h2>
 <ul>
 <li>Bernoulli sample at baseline with sampling probability <span class="math inline">\(p\)</span></li>
-<li><span class="math inline">\(S\)</span> (or <span class="math inline">\(S^{\ast}\)</span>) measured at <span class="math inline">\(\tau\)</span> in
+<li><span class="math inline">\(S(1)\)</span> (or <span class="math inline">\(S^{\ast}(1)\)</span>) measured at <span class="math inline">\(\tau\)</span> in
 <ul>
 <li>a subset of the sample with <span class="math inline">\(Y^{\tau}=0\)</span>, and</li>
 <li>all cases with <span class="math inline">\(Y^{\tau}=0\)</span></li>
 </ul></li>
 <li>Implications:
 <ul>
-<li><span class="math inline">\(n_{cases} = n^S_{cases}\)</span></li>
-<li>design parameter <span class="math inline">\(n^S_{controls}\)</span> replaced by probability <span class="math inline">\(p\)</span> because <span class="math inline">\(n^S_{controls}\)</span> is a random variable in case-cohort designs</li>
+<li><span class="math inline">\(n_{cases,1} = n^S_{cases,1}\)</span></li>
+<li>design parameter <span class="math inline">\(n^S_{controls,1}\)</span> replaced by probability <span class="math inline">\(p\)</span> because <span class="math inline">\(n^S_{controls,1}\)</span> is a random variable in case-cohort designs</li>
 </ul></li>
 </ul>
 </div>
-<div id="illustration-corpower-for-trichotomous-s-and-continuous-sast-bernoulli-sampling" class="section level2">
-<h2>Illustration: <code>CoRpower</code> for trichotomous <span class="math inline">\(\, S\)</span> and continuous <span class="math inline">\(\, S^{\ast}\)</span> | Bernoulli sampling</h2>
-<p>Trichotomous <span class="math inline">\(S\)</span> (Approach 1)</p>
+<div id="illustration-corpower-for-trichotomous-s1-and-continuous-sast1-bernoulli-sampling" class="section level2">
+<h2>Illustration: <code>CoRpower</code> for trichotomous <span class="math inline">\(\, S(1)\)</span> and continuous <span class="math inline">\(\, S^{\ast}(1)\)</span> | Bernoulli sampling</h2>
+<p>Trichotomous <span class="math inline">\(S(1)\)</span> (Approach 1)</p>
 <ul>
 <li><strong>Scenario 10:</strong> vary <span class="math inline">\(p\)</span></li>
 </ul>
-<p>Continuous <span class="math inline">\(S^{\ast}\)</span></p>
+<p>Continuous <span class="math inline">\(S^{\ast}(1)\)</span></p>
 <ul>
 <li><strong>Scenario 11:</strong> vary <span class="math inline">\(p\)</span></li>
 </ul>
 </div>
-<div id="scenario-10-vary-p-approach-1-trichotomous-s-bernoulli-sampling" class="section level2">
-<h2><em>Scenario 10:</em> vary <span class="math inline">\(\, p \)</span> (Approach 1) | Trichotomous <span class="math inline">\(\, S \)</span>, Bernoulli sampling</h2>
+<div id="scenario-10-vary-p-approach-1-trichotomous-s1-bernoulli-sampling" class="section level2">
+<h2><em>Scenario 10:</em> vary <span class="math inline">\(\, p \)</span> (Approach 1) | Trichotomous <span class="math inline">\(\, S(1) \)</span>, Bernoulli sampling</h2>
 <div id="run-simulations-and-compute-power-with-computepower-5" class="section level3">
 <h3>Run simulations and compute power with <code>computePower()</code></h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pwr &lt;-<span class="st"> </span><span class="kw">computePower</span>(<span class="dt">nCases =</span> <span class="dv">32</span>,             
-                    <span class="dt">nControls =</span> <span class="dv">3654</span>,       
-                    <span class="dt">nCasesWithS =</span> <span class="dv">32</span>,       
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pwr &lt;-<span class="st"> </span><span class="kw">computePower</span>(<span class="dt">nCasesTx =</span> <span class="dv">32</span>,             
+                    <span class="dt">nControlsTx =</span> <span class="dv">3654</span>,       
+                    <span class="dt">nCasesTxWithS =</span> <span class="dv">32</span>,       
                     <span class="dt">cohort =</span> <span class="ot">TRUE</span>,                <span class="co"># FALSE by default</span>
-                    <span class="dt">p =</span> <span class="fl">0.01</span>,                 <span class="co"># scalar; separate calls for 0.01, 0.02, 0.03, 0.05</span>
+                    <span class="dt">p =</span> <span class="kw">c</span>(<span class="fl">0.01</span>, <span class="fl">0.02</span>, <span class="fl">0.03</span>, <span class="fl">0.05</span>),               
                     <span class="dt">VEoverall =</span> <span class="fl">0.75</span>,             <span class="co"># overall VE</span>
                     <span class="dt">risk0 =</span> <span class="fl">0.034</span>,                <span class="co"># placebo-group endpoint risk from tau - taumax</span>
                     <span class="dt">VElat0 =</span> <span class="kw">seq</span>(<span class="dv">0</span>, VEoverall, <span class="dt">len=</span><span class="dv">100</span>), <span class="co"># grid of VE (V/P) among lower protected</span>
@@ -702,32 +722,32 @@ Repeat power calculation varying control:case ratio, <span class="math inline">\
 </div>
 <div id="plot-power-curves-with-plotpowertri-3" class="section level3">
 <h3>Plot power curves with <code>plotPowerTri()</code></h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPowerTri</span>(<span class="dt">outComputePower =</span> <span class="kw">list</span>(pwr1, pwr2, pwr3, pwr4),  <span class="co"># 'computePower' outputs</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPowerTri</span>(<span class="dt">outComputePower =</span> pwr,  <span class="co"># 'computePower' output</span>
              <span class="dt">legendText =</span> <span class="kw">paste0</span>(<span class="st">&quot;Cohort p = &quot;</span>, <span class="kw">c</span>(<span class="fl">0.01</span>, <span class="fl">0.02</span>, <span class="fl">0.03</span>, <span class="fl">0.05</span>)))</code></pre></div>
 </div>
 </div>
-<div id="scenario-11-vary-p-continuous-sast-bernoulli-sampling" class="section level2">
-<h2><em>Scenario 11:</em> vary <span class="math inline">\(\, p \)</span> | Continuous <span class="math inline">\(\, S^{\ast}\)</span>, Bernoulli sampling</h2>
+<div id="scenario-11-vary-p-continuous-sast1-bernoulli-sampling" class="section level2">
+<h2><em>Scenario 11:</em> vary <span class="math inline">\(\, p \)</span> | Continuous <span class="math inline">\(\, S^{\ast}(1)\)</span>, Bernoulli sampling</h2>
 <div id="run-simulations-and-compute-power-with-computepower-6" class="section level3">
 <h3>Run simulations and compute power with <code>computePower()</code></h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pwr &lt;-<span class="st"> </span><span class="kw">computePower</span>(<span class="dt">nCases =</span> <span class="dv">32</span>,             
-                    <span class="dt">nControls =</span> <span class="dv">3654</span>,        
-                    <span class="dt">nCasesWithS =</span> <span class="dv">32</span>,       
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pwr &lt;-<span class="st"> </span><span class="kw">computePower</span>(<span class="dt">nCasesTx =</span> <span class="dv">32</span>,             
+                    <span class="dt">nControlsTx =</span> <span class="dv">3654</span>,        
+                    <span class="dt">nCasesTxWithS =</span> <span class="dv">32</span>,       
                     <span class="dt">cohort =</span> <span class="ot">TRUE</span>,               <span class="co"># FALSE by default</span>
-                    <span class="dt">p =</span> <span class="fl">0.01</span>,                    <span class="co"># scalar; separate calls for 0.01, 0.02, 0.03, 0.05</span>
+                    <span class="dt">p =</span> <span class="kw">c</span>(<span class="fl">0.01</span>, <span class="fl">0.02</span>, <span class="fl">0.03</span>, <span class="fl">0.05</span>),                  
                     <span class="dt">VEoverall =</span> <span class="fl">0.75</span>,            <span class="co"># overall VE</span>
                     <span class="dt">risk0 =</span> <span class="fl">0.034</span>,               <span class="co"># placebo-group endpoint risk from tau - taumax</span>
                     <span class="dt">PlatVElowest =</span> <span class="fl">0.2</span>,          <span class="co"># prevalence of VE_lowest</span>
                     <span class="dt">VElowest =</span> <span class="kw">seq</span>(<span class="dv">0</span>, VEoverall, <span class="dt">len=</span><span class="dv">100</span>), <span class="co"># lowest VE for true biomarker X*&lt;=nu</span>
-                    <span class="dt">sigma2obs =</span> <span class="dv">1</span>,               <span class="co"># variance of observed biomarker S</span>
-                    <span class="dt">rho =</span> <span class="fl">0.9</span>                    <span class="co"># protection-relevant fraction of variance of S</span>
+                    <span class="dt">sigma2obs =</span> <span class="dv">1</span>,               <span class="co"># variance of observed biomarker S(1)</span>
+                    <span class="dt">rho =</span> <span class="fl">0.9</span>                    <span class="co"># protection-relevant fraction of variance of S(1)</span>
                     <span class="dt">M =</span> <span class="dv">1000</span>,                    <span class="co"># number of simulated clinical trials</span>
                     <span class="dt">alpha =</span> <span class="fl">0.05</span>,                <span class="co"># two-sided Wald test Type 1 error rate</span>
                     <span class="dt">biomType =</span> <span class="st">&quot;continuous&quot;</span>)     <span class="co"># &quot;continuous&quot; by default</span></code></pre></div>
 </div>
 <div id="plot-power-curves-with-plotpowercont-2" class="section level3">
 <h3>Plot power curves with <code>plotPowerCont()</code></h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPowerCont</span>(<span class="dt">outComputePower =</span> <span class="kw">list</span>(pwr1, pwr2, pwr3, pwr4),  <span class="co"># 'computePower' outputs</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPowerCont</span>(<span class="dt">outComputePower =</span> pwr,  <span class="co"># 'computePower' output</span>
               <span class="dt">legendText =</span> <span class="kw">paste0</span>(<span class="st">&quot;Cohort p = &quot;</span>, <span class="kw">c</span>(<span class="fl">0.01</span>, <span class="fl">0.02</span>, <span class="fl">0.03</span>, <span class="fl">0.05</span>)))</code></pre></div>
 </div>
 </div>

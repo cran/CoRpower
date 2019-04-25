@@ -1,0 +1,160 @@
+---
+title: "`CoRpower`'s Algorithms for Simulating Placebo Group and Baseline Immunogenicity Predictor Data"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Algorithms for Simulating Placebo Group and Baseline Immunogenicity Predictor Data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+\DeclareMathOperator{\corr}{corr}
+\DeclareMathOperator{\var}{var}
+
+## Introduction
+The `CoRpower` package assumes that $P(Y^{\tau}(1)=Y^{\tau}(0))=1$ for the biomarker sampling timepoint $\tau$, which renders the CoR parameter $P(Y=1 \mid S=s_1, Z=1, Y^{\tau}=0)$ equal to $P(Y=1 \mid S=s_1, Z=1, Y^{\tau}(1)=Y^{\tau}(0)=0)$, which links the CoR and biomarker-specific treatment efficacy (TE) parameters. Estimation of the latter requires outcome data in placebo recipients, and some estimation methods additionally require availability of a baseline immunogenicity predictor (BIP) of $S(1)$, the biomarker response at $\tau$ under assignment to treatment. In order to link power calculations for detecting a correlate of risk (CoR) and a correlate of TE (coTE), `CoRpower` allows to export simulated data sets that are used in `CoRpower`'s calculations and that are extended to include placebo-group and BIP data for harmonized use by methods assessing biomarker-specific TE. This vignette aims to describe `CoRpower`'s algorithms, and the underlying assumptions, for simulating placebo-group and BIP data. The exported data sets include full rectangular data to allow the user to consider various biomarker sub-sampling designs, e.g., different biomarker case:control sampling ratios, or case-control vs. case-cohort designs.
+
+***
+## Algorithms for Simulating Placebo Group Data
+### Trichotomous \(\, X\) and \(\, S(1)\) Using Approach 1
+<ol>
+<li> Specify $P^{lat}_0$, $P^{lat}_2$, $P_0$, $P_2$, $risk_0$, $n_{cases, 0}$, $n_{controls, 0}$, $K$
+  <ul>
+  <li> $N_{complete, 0} = n_{cases, 0} + n_{controls, 0}$
+  </ul>
+<li> Specify $Sens$, $Spec$, $FP^0$, and $FN^2$
+<li> Number of observations in each latent subgroup: $N_x = N_{complete, 0} P^{lat}_x$
+<li> Simulate $X$ under the assumption of homogeneous risk in the placebo group: 
+  <ul>
+  <li> Cases: $\left(n_{cases, 0}(0),n_{cases,0}(1),n_{cases,0}(2)\right) \sim \mathsf{Mult}(n_{cases,0},(p_0,p_1,p_2))$, where
+  \begin{align*}
+  p_x=P(X=x|Y=1,Y^{\tau}=0,Z=0) &= P(X=x|Y(0)=1)\\ 
+  &= \frac{P(Y(0)=1|X=x)P(X=x)}{P(Y(0)=1)}\\
+  &= \frac{risk^{lat}_0(x)P^{lat}_{x}}{risk_0}\\
+  &= P^{lat}_{x} \quad \text{because } risk^{lat}_0(x)=risk_0
+  \end{align*}
+  <li> Controls: $\left(n_{controls,0}(0),n_{controls,0}(1),n_{controls,0}(2)\right) \sim \mathsf{Mult}(n_{controls,0},(p_0,p_1,p_2))$, where
+  \begin{align*}
+  p_x=P(X=x|Y=0,Y^{\tau}=0,Z=0) &= P(X=x|Y(0)=0)\\ 
+  &= \frac{P(Y(0)=0|X=x)P(X=x)}{P(Y(0)=0)}\\
+  &= \frac{(1-risk^{lat}_0(x))P^{lat}_{x}}{(1-risk_0)}\\
+  &= P^{lat}_{x} \quad \text{because } risk^{lat}_0(x)=risk_0
+  \end{align*}
+  <li> $n_{controls,0}(x) = N_x - n_{cases,0}(x)$
+  </ul>
+<li> Simulate $Y$: Vector with $n_{cases,0}(0)$ 1's, followed by $n_{controls,0}(0)$ 0's, followed by $n_{cases,0}(1)$ 1's, etc.
+<li> Simulate $S(1)$: For each of the $N_x$ subjects, generate $S(1)$ by a draw from $\mathsf{Mult}(1,(p_0,p_1,p_2))$, where $p_k=P(S(1)=k|X=x)$ is given by $Sens, Spec$, etc.  
+</ol>
+
+### Trichotomous \(\, X\) and \(\, S(1)\) Using Approach 2
+<ol>
+<li> Specify $P^{lat}_0$, $P^{lat}_2$, $P_0$, $P_2$, $risk_0$, $N_{complete,0}$, $n_{cases,0}$, $n^S_{cases}$, $K$
+<li> Specify $\rho$ and $\sigma^2_{obs}$ 
+<li> Calculation of $(Sens, Spec, FP^0, FP^1, FN^1, FN^2)$:
+  <ol type="i">
+  <li> Assuming the classical measurement error model, where $X^{\ast} \sim \mathsf{N}(0,\sigma^2_{tr})$,  solve
+  $$P^{lat}_0 = P(X^{\ast} \leq \theta_0) \quad \textrm{and} \quad P^{lat}_2 = P(X^{\ast} > \theta_2)$$
+  for $\theta_0$ and $\theta_2$
+  <li> Generate $B$ realizations of $X^{\ast}$ and $S^{\ast} = X^{\ast} + e$, where $e \sim \mathsf{N}(0,\sigma^2_{e})$, and
+  $X^{\ast}$ independent of $e$
+      + $B = 20,000$ by default
+  <li> Using $\theta_0$ and $\theta_2$ from Step i., define
+  \begin{align*}
+  Spec(\phi_0) &= P(S^{\ast} \leq \phi_0 \mid X^{\ast} \leq \theta_0)\\
+  FN^1(\phi_0) &= P(S^{\ast} \leq \phi_0 \mid X^{\ast} \in (\theta_0,\theta_2])\\
+  FN^2(\phi_0) &= P(S^{\ast} \leq \phi_0 \mid X^{\ast} > \theta_2)\\
+  Sens(\phi_2) &= P(S^{\ast} > \phi_2 \mid X^{\ast} > \theta_2)\\
+  FP^1(\phi_2) &= P(S^{\ast} > \phi_2 \mid X^{\ast} \in (\theta_0,\theta_2])\\
+  FP^0(\phi_2) &= P(S^{\ast} > \phi_2 \mid X^{\ast} \leq \theta_0)
+  \end{align*}
+        
+  Estimate $Spec(\phi_0)$ by
+  $$\widehat{Spec}(\phi_0) = \frac{\#\{S^{\ast}_b \leq \phi_0, X^{\ast}_b \leq \theta_0\}}{\#\{X^{\ast}_b \leq \theta_0\}}\,$$ etc.
+  <li> Find $\phi_0 = \phi^{\ast}_0$ and $\phi_2 = \phi^{\ast}_2$ that numerically solve
+  \begin{align*}
+  P_0 &= \widehat{Spec}(\phi_0)P^{lat}_0 + \widehat{FN}^1(\phi_0)P^{lat}_1 + \widehat{FN}^2(\phi_0)P^{lat}_2\\
+  P_2 &= \widehat{Sens}(\phi_2)P^{lat}_2 + \widehat{FP}^1(\phi_2)P^{lat}_1 + \widehat{FP}^0(\phi_2)P^{lat}_0
+  \end{align*}
+  and compute
+  \[
+  Spec = \widehat{Spec}(\phi^{\ast}_0),\; Sens = \widehat{Sens}(\phi^{\ast}_2),\; \textrm{etc.}
+  \]
+  </ol>      
+
+<li> Follow Steps 3--6 under Approach 1
+</ol>
+
+### Continuous \(\, X^*\) and \(\, S^*(1)\)
+<ol>
+<li> Specify $P^{lat}_{lowestVE}$, $\rho$, $\sigma^2_{obs}$, $VE_{lowest}$, $risk_0$, $n_{cases,0}$, $n_{controls, 0}$, $n^S_{cases}$, $K$
+  <ul> 
+  <li> $N_{complete, 0} = n_{cases, 0} + n_{controls, 0}$
+  </ul>
+<li> Simulate $Y$ by creating a vector with $n_{cases,0}$ 1's followed by $n_{controls,0}$ 0's.
+<li> Simulate $X^*$ under the assumption of homogeneous risk in the placebo group:
+  <ul>
+  <li> Cases: from a grid of values ranging from -3 to 3, sample $n_{cases,0}$ with replacement from:
+  \begin{align*}
+  f_{X^{\ast}}(x^{\ast}|Y=1,Y^{\tau}=0,Z=0) &= f_{X^{\ast}}(x^{\ast}|Y(0)=1)\\
+  &= \frac{P(Y(0)=1|X^*=x^*)f_{X^{\ast}}(x^{\ast})}{P(Y(0)=1)}\\
+  &= \frac{risk^{lat}_0(x^*)f_{X^{\ast}}(x^{\ast})}{risk_0}\\
+  &= f_{X^{\ast}}(x^{\ast}) \quad \text{because } risk^{lat}_0(x^*)=risk_0
+  \end{align*}
+  <li> Controls: from a grid of values ranging from -3 to 3, sample $n_{controls,0}$ with replacement from:
+  \begin{align*}
+  f_{X^{\ast}}(x^{\ast}|Y=0,Y^{\tau}=0,Z=0) &= f_{X^{\ast}}(x^{\ast}|Y(0)=0)\\
+  &= \frac{P(Y(0)=0|X^*=x^*)f_{X^{\ast}}(x^{\ast})}{P(Y(0)=0)}\\
+  &= \frac{(1-risk^{lat}_0(x^*))f_{X^{\ast}}(x^{\ast})}{1-risk_0}\\
+  &= f_{X^{\ast}}(x^{\ast}) \quad \text{because } risk^{lat}_0(x^*)=risk_0
+  \end{align*}
+  <li> $f_{X^{\ast}}(x^{\ast})$ is fully specified because $X^* \sim N(0, \sigma^2_{tr})$
+  </ul>
+<li> Simulate $S^*(1)$: $S^*(1)=X^*+\epsilon,$ where $\epsilon \sim N(0, \sigma^2_e)$ and $\sigma_e^2=(1-\rho)\sigma^2_{obs}$. $\epsilon$ is independent of $X^*$ and is simulated by `rnorm(Ncomplete, mean=0, sd=sqrt(sigma2e))` 
+</ol>
+
+***
+## Algorithms for Simulating a Baseline Immunogenicity Predictor (BIP)
+### Trichotomous \(\, X, S(1),\) and \(\, BIP\) Using Approach 1
+<ol>
+<li> The user specifies a classification rule defined by $P(BIP=i \mid S(1)=j)$, $i,j=0,1,2$.
+<li> For a subject with biomarker measurement $S_k(1)$, generate $BIP_k$ by a draw from $\mathsf{Mult}(1, (q_0, q_1, q_2))$, where $q_i=P(BIP_k=i \mid S(1)=S_k(1))$, $i=0,1,2$.
+</ol>
+
+### Trichotomous \(\, X, S(1),\) and \(\, BIP\) Using Approach 2
+*Note: All variables with \* are continuous.*
+
+<ol>
+<li> The user specifies $\corr(BIP^*, S^*(1))$.
+<li> Assuming that $BIP^*$ follows an additive measurement error model, i.e., $BIP^* := S^*(1) + \delta$, where $\delta \sim N(0, \sigma^2_{\delta})$ with an unknown $\sigma^2_{\delta}$, and $\delta, \epsilon$, and $X^*$ are independent, solve the following equation for $\var \delta = \sigma^2_{\delta}$:
+$$
+\corr(BIP^*, S^*(1)) = \sqrt\frac{\var X^* + \var\epsilon}{\var X^* + \var\epsilon + \var \delta}
+$$
+<li> For the fixed $\phi^{\ast}_0$ and $\phi^{\ast}_2$ derived above, define
+\begin{align*}
+Spec_{BIP}(\xi_0) &= P(BIP^{\ast} \leq \xi_0 \mid S^{\ast} \leq \phi^{\ast}_0)\\
+FN^1_{BIP}(\xi_0) &= P(BIP^{\ast} \leq \xi_0 \mid S^{\ast} \in (\phi^{\ast}_0,\phi^{\ast}_2])\\
+FN^2_{BIP}(\xi_0) &= P(BIP^{\ast} \leq \xi_0 \mid S^{\ast} > \phi^{\ast}_2)\\
+Sens_{BIP}(\xi_2) &= P(BIP^{\ast} > \xi_2 \mid S^{\ast} > \phi^{\ast}_2)\\
+FP^1_{BIP}(\xi_2) &= P(BIP^{\ast} > \xi_2 \mid S^{\ast} \in (\phi^{\ast}_0,\phi^{\ast}_2])\\
+FP^0_{BIP}(\xi_2) &= P(BIP^{\ast} > \xi_2 \mid S^{\ast} \leq \phi^{\ast}_0)
+\end{align*}
+<li> Using the same technique as in the derivation of $\phi^{\ast}_0$ and $\phi^{\ast}_2$ above, find $\xi_0=\xi^{\ast}_0$ and $\xi_2=\xi^{\ast}_2$ that numerically solve
+\begin{align*}
+P_0 &= \widehat{Spec}_{BIP}(\xi_0)P_0 + \widehat{FN}_{BIP}^1(\xi_0)P_1 + \widehat{FN}_{BIP}^2(\xi_0)P_2\\
+P_2 &= \widehat{Sens}_{BIP}(\xi_2)P_2 + \widehat{FP}_{BIP}^1(\xi_2)P_1 + \widehat{FP}_{BIP}^0(\xi_2)P_0
+\end{align*}
+and compute
+$$
+Spec_{BIP} = \widehat{Spec}_{BIP}(\xi^{\ast}_0),\; Sens_{BIP} = \widehat{Sens}_{BIP}(\xi^{\ast}_2),\; \textrm{etc.}
+$$
+<li> For a subject with biomarker measurement $S_k(1)$, generate $BIP_k$ by a draw from $\mathsf{Mult}(1, (q_0, q_1, q_2))$, where $q_i$, $i=0,1,2$, are determined by $Sens_{BIP}$, $Spec_{BIP}$, etc. obtained in Step 4.
+</ol>
+
+### Continuous \(\, X^*, S^*(1),\) and \(\, BIP^*\)
+<ol>
+<li> The user specifies $\corr(BIP^*, S^*(1))$.
+<li> Assuming that $BIP^*$ follows an additive measurement error model, i.e., $BIP^* := S^*(1) + \delta$, where $\delta \sim N(0, \sigma^2_{\delta})$ with an unknown $\sigma^2_{\delta}$, and $\delta, \epsilon$, and $X^*$ are independent, solve the following equation for $\var \delta = \sigma^2_{\delta}$:
+$$
+\corr(BIP^*, S^*(1)) = \sqrt\frac{\var X^* + \var\epsilon}{\var X^* + \var\epsilon + \var \delta}
+$$
+<li> For a subject with biomarker measurement $S^*_k(1)$, generate $BIP^*_k$ as $BIP^*_k = S^*_k(1) + \delta$ using $\sigma^2_{\delta} = \var \delta$ obtained in Step 2.
+</ol>
