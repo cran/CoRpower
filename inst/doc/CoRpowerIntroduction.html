@@ -12,7 +12,7 @@
 
 
 
-<title>Introduction to CoRpower</title>
+<title>Introduction to R Package CoRpower</title>
 
 
 
@@ -88,11 +88,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<h1 class="title toc-ignore">Introduction to <code>CoRpower</code></h1>
+<h1 class="title toc-ignore">Introduction to R Package <code>CoRpower</code></h1>
 
 
 
-<p>The <code>CoRpower</code> package performs power calculations for correlates of risk, as described in [Gilbert, Janes, and Huang (2016). Power/Sample Size Calculations for Assessing Correlates of Risk in Clinical Efficacy Trials] The power calculations accommodate three types of biomarkers:</p>
+<p>The <code>CoRpower</code> package performs power calculations for correlates of risk, as described in Gilbert, Janes, and Huang (2016). Power/Sample Size Calculations for Assessing Correlates of Risk in Clinical Efficacy Trials. The power calculations accommodate three types of biomarkers:</p>
 <ul>
 <li>trichotomous</li>
 <li>dichotomous</li>
@@ -117,23 +117,28 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2>Set-up and notation | Without replacement sampling</h2>
 <ul>
 <li>Assume a randomized vaccine vs. placebo/control vaccine efficacy trial</li>
-<li><span class="math inline">\(N_1=\)</span> number of vaccine recipients observed to be at risk at <span class="math inline">\(\tau\)</span></li>
-<li><span class="math inline">\(n_{cases,1}\)</span> (<span class="math inline">\(n_{controls,1}\)</span>) <span class="math inline">\(=\)</span> number of observed cases (controls) in vaccine recipients between <span class="math inline">\(\tau\)</span> and <span class="math inline">\(\tau_{\mathrm{max}}\)</span>, where cases have <span class="math inline">\(\Delta Y = 1\)</span> and controls have <span class="math inline">\(\Delta (1-Y) = 1\)</span>
+<li>Participants are followed for the first occurrence of the primary clinical study endpoint, with follow-up through time <span class="math inline">\(\tau_{\mathrm{max}}\)</span></li>
+<li><span class="math inline">\(T\)</span> is the time from randomization (or enrollment) to the primary endpoint</li>
+<li><span class="math inline">\(Y = I(T \leq \tau_{\mathrm{max}})\)</span> is the binary outcome of interest</li>
+<li><span class="math inline">\(\Delta\)</span> is the indicator that <span class="math inline">\(Y\)</span> is observed; i.e., <span class="math inline">\(\Delta = 0\)</span> if the participants drops out before <span class="math inline">\(\tau_{\mathrm{max}}\)</span> and before experiencing the primary endpoint and <span class="math inline">\(\Delta = 1\)</span> otherwise</li>
+<li><span class="math inline">\(N_1\)</span> is the number of vaccine recipients observed or expected to be at risk at <span class="math inline">\(\tau\)</span> (typically, <span class="math inline">\(\tau\)</span> is the biomarker sampling timepoint)</li>
+<li><span class="math inline">\(n_{cases,1}\)</span> (<span class="math inline">\(n_{controls,1}\)</span>) is the number of observed or expected cases (controls) in vaccine recipients between <span class="math inline">\(\tau\)</span> and <span class="math inline">\(\tau_{\mathrm{max}}\)</span>, where cases have <span class="math inline">\(\Delta Y = 1\)</span> and controls have <span class="math inline">\(\Delta (1-Y) = 1\)</span>
 <ul>
+<li>Note that both cases and controls have <span class="math inline">\(\Delta = 1\)</span></li>
 <li><span class="math inline">\(n_{cases,1} + n_{controls,1} \leq N_1\)</span></li>
 </ul></li>
-<li><p><span class="math inline">\(n^S_{cases,1}\)</span> (<span class="math inline">\(n^S_{controls,1}\)</span>) <span class="math inline">\(=\)</span> number of observed cases (controls) in vaccine recipients between <span class="math inline">\(\tau\)</span> and <span class="math inline">\(\tau_{\mathrm{max}}\)</span> with measured <span class="math inline">\(S(1)\)</span> (or <span class="math inline">\(S^{\ast}(1)\)</span>)</p></li>
-<li><p>If calculations done at design stage, then <span class="math inline">\(N_1\)</span>, <span class="math inline">\(n_{cases,1}\)</span>, <span class="math inline">\(n_{controls,1}\)</span>, <span class="math inline">\(n^S_{cases,1}\)</span>, and <span class="math inline">\(n^S_{controls,1}\)</span> projected numbers</p></li>
+<li><p><span class="math inline">\(n^S_{cases,1}\)</span> (<span class="math inline">\(n^S_{controls,1}\)</span>) is the number of observed cases (controls) in vaccine recipients between <span class="math inline">\(\tau\)</span> and <span class="math inline">\(\tau_{\mathrm{max}}\)</span> with measured biomarker response <span class="math inline">\(S(1)\)</span> (or <span class="math inline">\(S^{\ast}(1)\)</span>)</p></li>
+<li><p>If calculations done at design stage, then <span class="math inline">\(N_1\)</span>, <span class="math inline">\(n_{cases,1}\)</span>, <span class="math inline">\(n_{controls,1}\)</span>, <span class="math inline">\(n^S_{cases,1}\)</span>, and <span class="math inline">\(n^S_{controls,1}\)</span> are expected counts</p></li>
 </ul>
 </div>
 <div id="algorithm-for-trichotomous-biomarker-s1-without-replacement-sampling" class="section level2">
 <h2>Algorithm for trichotomous biomarker <span class="math inline">\(S(1)\)</span> | Without replacement sampling</h2>
 <ol style="list-style-type: decimal">
-<li>Specify overall <span class="math inline">\(VE\)</span> between <span class="math inline">\(\tau\)</span> and <span class="math inline">\(\tau_{\mathrm{max}}\)</span>
+<li>Specify true overall <span class="math inline">\(VE\)</span> between <span class="math inline">\(\tau\)</span> and <span class="math inline">\(\tau_{\mathrm{max}}\)</span>
 <ul>
 <li>Protocol-specified design alternative or <span class="math inline">\(\widehat{VE}\)</span></li>
 </ul></li>
-<li>Specify <span class="math inline">\(risk_0\)</span>
+<li>Specify <span class="math inline">\(risk_0 = P(Y=1 \mid Z=0, Y^{\tau}=0)\)</span> where <span class="math inline">\(Y^{\tau}=I(T \leq \tau)\)</span>
 <ul>
 <li>Protocol-specified placebo-group endpoint rate or <span class="math inline">\(\widehat{risk}_0\)</span></li>
 </ul></li>
@@ -166,9 +171,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>
 Assuming the classical measurement error model, where <span class="math inline">\(X^{\ast} \sim \mathsf{N}(0,\rho\sigma^2_{obs})\)</span>, solve <span class="math display">\[P^{lat}_0 = P(X^{\ast} \leq \theta_0) \quad \textrm{and} \quad P^{lat}_2 = P(X^{\ast} &gt; \theta_2)\]</span> for <span class="math inline">\(\theta_0\)</span> and <span class="math inline">\(\theta_2\)</span>
 <li>
-Generate <span class="math inline">\(B\)</span> realizations of <span class="math inline">\(X^{\ast}\)</span> and <span class="math inline">\(S^{\ast} = X^{\ast} + e\)</span>, where <span class="math inline">\(e \sim \mathsf{N}(0,(1-\rho)\sigma^2_{obs})\)</span>, and <span class="math inline">\(X^{\ast}\)</span> independent of <span class="math inline">\(e\)</span> + <span class="math inline">\(B = 20,000\)</span> by default
+Generate <span class="math inline">\(B\)</span> realizations of <span class="math inline">\(X^{\ast}\)</span> and <span class="math inline">\(S^{\ast} = X^{\ast} + e\)</span>, where <span class="math inline">\(e \sim \mathsf{N}(0,(1-\rho)\sigma^2_{obs})\)</span>, and <span class="math inline">\(X^{\ast}\)</span> independent of <span class="math inline">\(e\)</span>
+<ul>
 <li>
-<p>Using <span class="math inline">\(\theta_0\)</span> and <span class="math inline">\(\theta_2\)</span> from Step i., define <span class="math display">\[
+<span class="math inline">\(B = 20,000\)</span> by default
+</ul>
+<li>
+<p>Using <span class="math inline">\(\theta_0\)</span> and <span class="math inline">\(\theta_2\)</span> from the first step, define <span class="math display">\[
 \begin{align}
 Spec(\phi_0) &amp;= P(S^{\ast} \leq \phi_0 \mid X^{\ast} \leq \theta_0)\\
 FN^1(\phi_0) &amp;= P(S^{\ast} \leq \phi_0 \mid X^{\ast} \in (\theta_0,\theta_2])\\
@@ -191,10 +200,16 @@ Spec = \widehat{Spec}(\phi^{\ast}_0),\; Sens = \widehat{Sens}(\phi^{\ast}_2),\; 
 </ol></li>
 <li>In Approach 2, plot <span class="math display">\[
     RR_t \quad \textrm{vs.} \quad \frac{RR^{lat}_2}{RR^{lat}_0},
-    \]</span> where <span class="math display">\[
+    \]</span> where <span class="math inline">\(RR_t\)</span> is the CoR effect size defined as <span class="math display">\[
   RR_t := \frac{risk_1(2)}{risk_1(0)} = \frac{\sum_{x=0}^2 RR^{lat}_x P(X=x|S(1)=2)}{\sum_{x=0}^2 RR^{lat}_x P(X=x|S(1)=0)}
   \]</span></li>
-<li><p>For <span class="math inline">\(\rho &lt; 1\)</span>, <span class="math inline">\(RR_t\)</span> closer to 1 than <span class="math inline">\(RR^{lat}_2\big/ RR^{lat}_0\)</span></p></li>
+<li>If <span class="math inline">\(\rho &lt; 1\)</span>, then <span class="math inline">\(RR_t\)</span> is closer to 1 than <span class="math inline">\(RR^{lat}_2\big/ RR^{lat}_0\)</span>
+<ul>
+<li>
+Note that, under the assumption of homogeneous risk in the placebo group, i.e., <span class="math inline">\(risk_0^{lat}(x) = risk_0\)</span>, <span class="math inline">\(x=0,1,2\)</span>, the relative risk ratio <span class="math inline">\(RR^{lat}_2\big/ RR^{lat}_0 = risk_1^{lat}(2) \big/ risk_1^{lat}(0)\)</span>
+<li>
+Consequently, <span class="math inline">\(risk_1(2) \big/ risk_1(0) &gt; risk_1^{lat}(2) \big/ risk_1^{lat}(0)\)</span> because, if <span class="math inline">\(\rho &lt; 1\)</span>, then <span class="math inline">\(risk_1(2) &gt; risk_1^{lat}(2)\)</span> and <span class="math inline">\(risk_1(0) &lt; risk_1^{lat}(0)\)</span>
+</ul></li>
 </ul></li>
 <li>Simulate <span class="math inline">\(M\)</span> data sets under the true parameter values:
 <ol type="a">
